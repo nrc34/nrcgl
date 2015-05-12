@@ -1,0 +1,9 @@
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl.UITests\bin\Debug\nrcgl.UITests.dll
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl.UITests\bin\Debug\nrcgl.UITests.pdb
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl.UITests\bin\Debug\nunit.framework.dll
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl.UITests\bin\Debug\Xamarin.UITest.dll
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl.UITests\bin\Debug\nunit.framework.xml
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl.UITests\bin\Debug\Xamarin.UITest.xml
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl.UITests\obj\Debug\nrcgl.UITests.csprojResolveAssemblyReference.cache
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl.UITests\obj\Debug\nrcgl.UITests.dll
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl.UITests\obj\Debug\nrcgl.UITests.pdb

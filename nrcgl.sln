@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nrcgl", "nrcgl\nrcgl.csproj", "{DA77F4EB-3576-4B87-BCC2-6B5E159B6ACA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nrcgl.UITests", "nrcgl.UITests\nrcgl.UITests.csproj", "{EF49D825-8A0F-4D49-86AB-4BDD18A3C515}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DA77F4EB-3576-4B87-BCC2-6B5E159B6ACA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA77F4EB-3576-4B87-BCC2-6B5E159B6ACA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA77F4EB-3576-4B87-BCC2-6B5E159B6ACA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA77F4EB-3576-4B87-BCC2-6B5E159B6ACA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF49D825-8A0F-4D49-86AB-4BDD18A3C515}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF49D825-8A0F-4D49-86AB-4BDD18A3C515}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF49D825-8A0F-4D49-86AB-4BDD18A3C515}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF49D825-8A0F-4D49-86AB-4BDD18A3C515}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

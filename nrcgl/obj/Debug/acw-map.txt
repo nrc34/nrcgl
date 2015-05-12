@@ -1,0 +1,8 @@
+nrcgl.MainActivity, nrcgl;md507da01d19045d5f91987f55bbee96c1e.MainActivity
+nrcgl.MainActivity, nrcgl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md507da01d19045d5f91987f55bbee96c1e.MainActivity
+nrcgl.MainActivity;md507da01d19045d5f91987f55bbee96c1e.MainActivity
+nrcgl.MainActivity;md507da01d19045d5f91987f55bbee96c1e.MainActivity
+nrcgl.GLView, nrcgl;md507da01d19045d5f91987f55bbee96c1e.GLView
+nrcgl.GLView, nrcgl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md507da01d19045d5f91987f55bbee96c1e.GLView
+nrcgl.GLView;md507da01d19045d5f91987f55bbee96c1e.GLView
+nrcgl.GLView;md507da01d19045d5f91987f55bbee96c1e.GLView

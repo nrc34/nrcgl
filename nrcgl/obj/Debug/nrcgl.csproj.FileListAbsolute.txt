@@ -1,0 +1,17 @@
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\bin\Debug\nrcgl.dll
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\bin\Debug\nrcgl.pdb
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\bin\Debug\nrcgl.dll.mdb
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\bin\Debug\com.companyname.nrcgl.apk
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\bin\Debug\com.companyname.nrcgl-Signed.apk
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\obj\Debug\nrcgl.dll
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\obj\Debug\nrcgl.pdb
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\obj\Debug\android\bin\com.companyname.nrcgl.apk
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\obj\Debug\res\layout\main.xml
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\obj\Debug\res\values\strings.xml
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\obj\Debug\res\drawable-hdpi\icon.png
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\obj\Debug\res\drawable-mdpi\icon.png
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\obj\Debug\res\drawable-xhdpi\icon.png
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\obj\Debug\res\drawable-xxhdpi\icon.png
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\obj\Debug\res\drawable-xxxhdpi\icon.png
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\obj\Debug\R.cs.flag
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\obj\Debug\uploadflags.txt
