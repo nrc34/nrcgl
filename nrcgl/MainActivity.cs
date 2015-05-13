@@ -37,22 +37,31 @@ namespace nrcgl
 			// - should match filename res/layout/main.axml ?
 			SetContentView (Resource.Layout.Main);
 
+			var textView = FindViewById<TextView> (Resource.Id.textView1);
+			textView.Text = "Nuno Ramalho"; //vid.Vertexs.Count.ToString();
+
 			// Load the view
-			FindViewById (Resource.Id.glview);
+			var glView = FindViewById<GLView> (Resource.Id.glview);
+
+			glView.GiveTextView (textView);
+
+
+
+			
 		}
 
 		protected override void OnPause ()
 		{
 			// never forget to do this!
 			base.OnPause ();
-			(FindViewById (Resource.Id.glview) as AndroidGameView).Pause ();
+			(FindViewById (Resource.Id.glview) as GLView).Pause ();
 		}
 
 		protected override void OnResume ()
 		{
 			// never forget to do this!
 			base.OnResume ();
-			(FindViewById (Resource.Id.glview) as AndroidGameView).Resume ();
+			(FindViewById (Resource.Id.glview) as GLView).Resume ();
 		}
 	}
 }

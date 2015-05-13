@@ -63,8 +63,11 @@ namespace nrcgl
 		public partial class Id
 		{
 			
+			// aapt resource value: 0x7f060001
+			public const int glview = 2131099649;
+			
 			// aapt resource value: 0x7f060000
-			public const int glview = 2131099648;
+			public const int textView1 = 2131099648;
 			
 			static Id()
 			{

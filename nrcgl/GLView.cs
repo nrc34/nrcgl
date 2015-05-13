@@ -12,11 +12,14 @@ using Android.Util;
 using Android.Views;
 using Android.Content;
 using nrcgl.nrcgl;
+using Android.Widget;
 
 namespace nrcgl
 {
 	class GLView : AndroidGameView
 	{
+		TextView textView;
+
 		int viewportWidth, viewportHeight;
 		int mProgramHandle;
 		int mColorHandle;
@@ -49,6 +52,7 @@ namespace nrcgl
 
 		void Init ()
 		{
+			Run ();
 		}
 
 		// This method is called everytime the context needs
@@ -100,7 +104,8 @@ namespace nrcgl
 			// if you've registered delegates for OnLoad
 			base.OnLoad (e);
 
-			viewportHeight = Height; viewportWidth = Width;
+			viewportHeight = Height; 
+			viewportWidth = Width;
 
 			// Set our triangle's vertices
 			vertices = new float [] {
@@ -111,15 +116,21 @@ namespace nrcgl
 
 			vid = Tools.DeserializeModel();
 
+			textView.Text = "Costa" + vid.Vertexs.Count.ToString();
+
 			// Set color with red, green, blue and alpha (opacity) values
 			color = new float [] { 0.63671875f, 0.76953125f, 0.22265625f, 1.0f };
 
 			// Vertex and fragment shaders
-			string vertexShaderSrc = "uniform mat4 uMVPMatrix;   \n" +
-				"attribute vec4 vertex_position;    \n" +
+			string vertexShaderSrc = 
+				"attribute vec3 vertex_position;  \n" +
+				"attribute vec3 vertex_normal;  \n" +
+				"attribute vec2 vertex_texcoord;  \n" +
+				"attribute vec4 vertex_color;  \n" +
+				"uniform mat4 uMVPMatrix;   \n" +
 				"void main()                  \n" +
 				"{                            \n" +
-				"   gl_Position = vertex_position;  \n" +
+				"   gl_Position = vec4(vertex_position, 1f);  \n" +
 				"}                            \n";
 
 			string fragmentShaderSrc = "precision mediump float;             \n" +
@@ -138,33 +149,7 @@ namespace nrcgl
 			VertexBuffer.IndexFromLength();
 			VertexBuffer.Load();
 
-//			int vertexShader = LoadShader (All.VertexShader, vertexShaderSrc );
-//			int fragmentShader = LoadShader (All.FragmentShader, fragmentShaderSrc );
-//			mProgramHandle = GL.CreateProgram();
-//			if (mProgramHandle == 0)
-//				throw new InvalidOperationException ("Unable to create program");
-//
-//			GL.AttachShader (mProgramHandle, vertexShader);
-//			GL.AttachShader (mProgramHandle, fragmentShader);
-//
-//			GL.BindAttribLocation (mProgramHandle, 0, "vPosition");
-//			GL.LinkProgram (mProgramHandle);
-//
-//			int linked;
-//			GL.GetProgram (mProgramHandle, All.LinkStatus, out linked);
-//			if (linked == 0) {
-//				// link failed
-//				int length;
-//				GL.GetProgram (mProgramHandle, All.InfoLogLength, out length);
-//				if (length > 0) {
-//					var log = new StringBuilder (length);
-//					GL.GetProgramInfoLog (mProgramHandle, length, out length, log);
-//					Log.Debug ("GL2", "Couldn't link program: " + log.ToString ());
-//				}
-//
-//				GL.DeleteProgram (mProgramHandle);
-//				throw new InvalidOperationException ("Unable to link program");
-//			}
+			VertexBuffer.Bind(shader);
 
 			GL.Viewport(0, 0, viewportWidth, viewportHeight);
 
@@ -172,9 +157,14 @@ namespace nrcgl
 
 			// this projection matrix is applied to object coordinates
 			// in the onDrawFrame() method
-			mProjectionMatrix = OpenTK.Matrix4.CreatePerspectiveOffCenter(-ratio, ratio, -1, 1, 3, 7);
+			mProjectionMatrix = 
+				OpenTK.Matrix4.
+					CreatePerspectiveFieldOfView(MathHelper.PiOver4,
+															ratio, 
+															0.5f, 
+															1000.0f);
 
-			RenderTriangle ();
+			//RenderTriangle ();
 		}
 
 
@@ -253,16 +243,19 @@ namespace nrcgl
 
 			// this projection matrix is applied to object coordinates
 			// in the onDrawFrame() method
-			mProjectionMatrix = OpenTK.Matrix4.CreatePerspectiveOffCenter(-ratio, ratio, -1, 1, 3, 7);
+			mProjectionMatrix = 
+				OpenTK.Matrix4.
+				CreatePerspectiveFieldOfView(MathHelper.PiOver4,
+					ratio, 
+					0.5f, 
+					1000.0f);
+			
 
-			RenderTriangle ();
+			//RenderTriangle ();
 
 
 
 		}
-
-
-
 
 		public virtual void DrawBufer(VertexFloatBuffer buffer, VertexFormat vertexFormat)
 		{
@@ -327,6 +320,27 @@ namespace nrcgl
 			default:
 				break;
 			}
+		}
+
+		public void GiveTextView(TextView textView)
+		{
+			this.textView = textView;
+
+		}
+
+
+		protected override void OnRenderFrame (FrameEventArgs e)
+		{
+			base.OnRenderFrame (e);
+
+			GL.ClearColor (0.0f, 0.0f, 0.6f, 1);
+			GL.Clear(ClearBufferMask.ColorBufferBit |
+				ClearBufferMask.DepthBufferBit);
+
+
+
+
+			SwapBuffers();
 		}
 
 	}

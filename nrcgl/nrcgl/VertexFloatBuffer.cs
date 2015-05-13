@@ -314,7 +314,7 @@ namespace nrcgl.nrcgl
             }
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, id_ebo);
-            GL.DrawElements(DrawMode, index_position, DrawElementsType.UnsignedInt, 0);
+			GL.DrawElements(DrawMode, index_position, DrawElementsType.UnsignedInt, 0);
 
             GL.DisableVertexAttribArray(0);
             GL.DisableVertexAttribArray(1);
