@@ -7,6 +7,8 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using Android.Content.PM;
+using OpenTK.Platform.Android;
+using System.IO;
 
 namespace nrcgl
 {
@@ -22,29 +24,35 @@ namespace nrcgl
 		Icon = "@drawable/icon")]
 	public class MainActivity : Activity
 	{
-		GLView view;
+		public static Stream input;
 
 		protected override void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
 
-			// Create our OpenGL view, and display it
-			view = new GLView (this);
-			SetContentView (view);
+
+			input = Assets.Open ("Torus.xml");
+
+			/// Inflate our UI from its XML layout description
+			// - should match filename res/layout/main.axml ?
+			SetContentView (Resource.Layout.Main);
+
+			// Load the view
+			FindViewById (Resource.Id.glview);
 		}
 
 		protected override void OnPause ()
 		{
 			// never forget to do this!
 			base.OnPause ();
-			view.Pause ();
+			(FindViewById (Resource.Id.glview) as AndroidGameView).Pause ();
 		}
 
 		protected override void OnResume ()
 		{
 			// never forget to do this!
 			base.OnResume ();
-			view.Resume ();
+			(FindViewById (Resource.Id.glview) as AndroidGameView).Resume ();
 		}
 	}
 }

@@ -27,6 +27,7 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <AndroidLinkMode>None</AndroidLinkMode>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -36,6 +37,7 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -49,6 +51,11 @@
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GLView.cs" />
+    <Compile Include="nrcgl\VertexsIndicesData.cs" />
+    <Compile Include="nrcgl\Vertex.cs" />
+    <Compile Include="nrcgl\VertexFloatBuffer.cs" />
+    <Compile Include="nrcgl\Shader.cs" />
+    <Compile Include="nrcgl\Tools.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -65,4 +72,12 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Assets\Models\" />
+    <Folder Include="nrcgl\" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\Models\Torus.xml" />
+    <AndroidAsset Include="Assets\Torus.xml" />
+  </ItemGroup>
 </Project>
