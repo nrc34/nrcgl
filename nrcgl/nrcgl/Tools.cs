@@ -8,12 +8,12 @@ namespace nrcgl
 {
 	public class Tools
 	{
-		public static VertexsIndicesData DeserializeModel()
+		public static VertexsIndicesData DeserializeModel(Stream stream)
 		{
 			VertexsIndicesData vertexsIndicesData = new VertexsIndicesData();
 
 			XmlSerializer xmlSerializer = new XmlSerializer(vertexsIndicesData.GetType());
-			StreamReader reader = new StreamReader(MainActivity.input);
+			StreamReader reader = new StreamReader(stream);
 			vertexsIndicesData = (VertexsIndicesData)xmlSerializer.Deserialize(reader);
 
 			reader.Close();

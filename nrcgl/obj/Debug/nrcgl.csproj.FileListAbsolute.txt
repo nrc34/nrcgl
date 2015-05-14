@@ -15,3 +15,4 @@ C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\obj\Debug\res\drawable-xxhdpi
 C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\obj\Debug\res\drawable-xxxhdpi\icon.png
 C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\obj\Debug\R.cs.flag
 C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\obj\Debug\uploadflags.txt
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\obj\Debug\nrcgl.csprojResolveAssemblyReference.cache

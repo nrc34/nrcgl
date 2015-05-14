@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 
 using OpenTK;
-using OpenTK.Graphics;
+//using OpenTK.Graphics;
 using OpenTK.Graphics.ES20;
 using OpenTK.Platform;
 using OpenTK.Platform.Android;
@@ -13,6 +13,7 @@ using Android.Views;
 using Android.Content;
 using nrcgl.nrcgl;
 using Android.Widget;
+using System.IO;
 
 namespace nrcgl
 {
@@ -22,7 +23,9 @@ namespace nrcgl
 
 		int viewportWidth, viewportHeight;
 		int mMVPMatrixHandle;
-		float [] vertices;
+		int mMVMatrixHandle;
+		int mPMatrixHandle;
+		int mMMatrixHandle;
 
 		Matrix4 mProjectionMatrix;
 		Matrix4 mViewMatrix;
@@ -34,8 +37,7 @@ namespace nrcgl
 
 		float rotate = 0f;
 
-		// Set color with red, green, blue and alpha (opacity) values
-		float [] color;
+
 
 		public GLView (Context context, IAttributeSet attrs) :
 		base (context, attrs)
@@ -51,7 +53,7 @@ namespace nrcgl
 
 		void Init ()
 		{
-			Run (30);
+			Run ();
 		}
 
 		// This method is called everytime the context needs
@@ -59,7 +61,7 @@ namespace nrcgl
 		// prior to context creation
 		protected override void CreateFrameBuffer ()
 		{
-			ContextRenderingApi = GLVersion.ES2;
+			ContextRenderingApi = OpenTK.Graphics.GLVersion.ES2;
 
 			// the default GraphicsMode that is set consists of (16, 16, 0, 0, 2, false)
 			try {
@@ -103,35 +105,18 @@ namespace nrcgl
 			// if you've registered delegates for OnLoad
 			base.OnLoad (e);
 
-			viewportHeight = Height; 
-			viewportWidth = Width;
-
-			vid = Tools.DeserializeModel();
+			vid = Tools.DeserializeModel(MainActivity.input);
 
 			textView.Text = "Costa" + vid.Vertexs.Count.ToString();
 
-			// Set color with red, green, blue and alpha (opacity) values
-			color = new float [] { 0.63671875f, 0.76953125f, 0.22265625f, 1.0f };
-
 			// Vertex and fragment shaders
-			string vertexShaderSrc = 
-				"attribute vec3 vertex_position;  \n" +
-				"attribute vec3 vertex_normal;  \n" +
-				"attribute vec2 vertex_texcoord;  \n" +
-				"attribute vec4 vertex_color;  \n" +
-				"uniform mat4 uMVPMatrix;   \n" +
-				"void main()                  \n" +
-				"{                            \n" +
-				"   gl_Position = uMVPMatrix*vec4(vertex_position, 1f);  \n" +
-				"}                            \n";
+			StreamReader vsReader = new StreamReader(MainActivity.vShader);
+			string vertexShaderSrc = vsReader.ReadToEnd ();
 
-			string fragmentShaderSrc = "precision mediump float;             \n" +
-				"uniform vec4 vColor;                         \n" +
-				"void main()                                  \n" +
-				"{                                            \n" +
-				"  gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);  \n" +
-				"}                                            \n";
+			StreamReader fsReader = new StreamReader(MainActivity.fShader);
+			string fragmentShaderSrc = fsReader.ReadToEnd ();
 
+			// initialize shader
 			shader = 
 				new Shader(
 					ref vertexShaderSrc, 
@@ -142,7 +127,7 @@ namespace nrcgl
 				new VertexFloatBuffer(
 					VertexFormat.XYZ_NORMAL_COLOR, 
 					7650, 
-					BeginMode.Lines);
+					BeginMode.Triangles);
 
 			DrawBufer(VertexBuffer, VertexFormat.XYZ_NORMAL_COLOR);
 
@@ -152,6 +137,9 @@ namespace nrcgl
 			VertexBuffer.Bind(shader);
 
 			// Initialize GL
+			viewportHeight = Height; 
+			viewportWidth = Width;
+
 			GL.Enable(EnableCap.DepthTest);
 
 			GL.Viewport(0, 0, viewportWidth, viewportHeight);
@@ -168,18 +156,27 @@ namespace nrcgl
 															1000.0f);
 
 			// Set the camera position (View matrix)
-			mViewMatrix = Matrix4.LookAt(0, 0, -100, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+			mViewMatrix = Matrix4.LookAt(0, 5, -10, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
 
 			// Calculate the projection and view transformation
 			mModelViewProjectionMatrix = Matrix4.Mult(mProjectionMatrix, mViewMatrix);
 
+			var mModelMatrix = Matrix4.Scale (1);
+			var mModelViewMatrix = Matrix4.Mult(mModelMatrix, mViewMatrix);
+
 			GL.UseProgram (shader.Program);
 
 			// get handle to shape's transformation matrix
-			mMVPMatrixHandle = GL.GetUniformLocation(shader.Program, "uMVPMatrix");
-
+			mMVMatrixHandle = GL.GetUniformLocation(shader.Program, "modelview_matrix");
+			mPMatrixHandle = GL.GetUniformLocation(shader.Program, "projection_matrix");
+			mMMatrixHandle = GL.GetUniformLocation(shader.Program, "model_matrix");
+			//model_matrix
 			// Apply the projection and view transformation
-			GL.UniformMatrix4(mMVPMatrixHandle, false, ref mModelViewProjectionMatrix);
+			//GL.UniformMatrix4(mMVPMatrixHandle, false, ref mModelViewProjectionMatrix);
+
+			GL.UniformMatrix4 (mMVMatrixHandle, false, ref mModelViewMatrix);
+			GL.UniformMatrix4 (mPMatrixHandle, false, ref mProjectionMatrix);
+			GL.UniformMatrix4 (mMMatrixHandle, false, ref mModelMatrix);
 
 			GL.UseProgram (0);
 
@@ -293,34 +290,30 @@ namespace nrcgl
 
 			MakeCurrent ();
 
-			GL.ClearColor (0.0f, 0.0f, 0.0f + rotate, 1f);
+			GL.ClearColor (0.0f, 0.0f, 0.6f, 1f);
 			GL.Clear(ClearBufferMask.ColorBufferBit |
 				ClearBufferMask.DepthBufferBit);
 
-			mModelViewProjectionMatrix = 
-				Matrix4.Mult (Matrix4.Scale (rotate), 
-							  mViewMatrix) * mProjectionMatrix;
+//			mModelViewProjectionMatrix = 
+//				Matrix4.Mult (Matrix4.CreateRotationY (rotate * 12), 
+//							  mViewMatrix) * mProjectionMatrix;
 			rotate += 0.01f;
 
-			textView.Text = shader.VertexSource.Substring(shader.VertexSource.Length - 100);
-
-
-			//mMVPMatrixHandle = GL.GetUniformLocation(shader.Program, new StringBuilder("uMVPMatrix"));
+			//textView.Text = shader.VertexSource.Substring(shader.VertexSource.Length - 100);
 
 
 			GL.UseProgram (shader.Program);
 
-			mMVPMatrixHandle = GL.GetUniformLocation (shader.Program, "uMVPMatrix");
-			GL.UniformMatrix4(mMVPMatrixHandle, false, ref mModelViewProjectionMatrix);
+			var mModelMatrix = Matrix4.CreateRotationY (rotate * 12);
+			var mModelViewMatrix = Matrix4.Mult(mModelMatrix, mViewMatrix);
 
-			GL.UseProgram (0);
-
-
-
+			GL.UniformMatrix4 (mMVMatrixHandle, false, ref mModelViewMatrix);
+			GL.UniformMatrix4 (mMMatrixHandle, false, ref mModelMatrix);
 
 
 			VertexBuffer.Bind(shader);
 
+			GL.UseProgram (0);
 			SwapBuffers();
 		}
 

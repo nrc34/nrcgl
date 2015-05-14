@@ -79,5 +79,7 @@
   <ItemGroup>
     <AndroidAsset Include="Assets\Models\Torus.xml" />
     <AndroidAsset Include="Assets\Torus.xml" />
+    <AndroidAsset Include="Assets\vShader_Torus.vs" />
+    <AndroidAsset Include="Assets\fShader_Torus.fs" />
   </ItemGroup>
 </Project>

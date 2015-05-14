@@ -26,13 +26,17 @@ namespace nrcgl
 	{
 		public static Stream input;
 
+		public static Stream vShader;
+		public static Stream fShader;
+
 		protected override void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
 
 
 			input = Assets.Open ("Torus.xml");
-
+			vShader = Assets.Open ("vShader_Torus.vs");
+			fShader = Assets.Open ("fShader_Torus.fs");
 			/// Inflate our UI from its XML layout description
 			// - should match filename res/layout/main.axml ?
 			SetContentView (Resource.Layout.Main);
