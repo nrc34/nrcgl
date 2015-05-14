@@ -21,9 +21,6 @@ namespace nrcgl
 		TextView textView;
 
 		int viewportWidth, viewportHeight;
-		int mProgramHandle;
-		int mColorHandle;
-		int mPositionHandle;
 		int mMVPMatrixHandle;
 		float [] vertices;
 
@@ -34,6 +31,8 @@ namespace nrcgl
 		Shader shader;
 		VertexFloatBuffer VertexBuffer;
 		VertexsIndicesData vid;
+
+		float rotate = 0f;
 
 		// Set color with red, green, blue and alpha (opacity) values
 		float [] color;
@@ -52,7 +51,7 @@ namespace nrcgl
 
 		void Init ()
 		{
-			Run ();
+			Run (30);
 		}
 
 		// This method is called everytime the context needs
@@ -107,13 +106,6 @@ namespace nrcgl
 			viewportHeight = Height; 
 			viewportWidth = Width;
 
-			// Set our triangle's vertices
-			vertices = new float [] {
-				0.0f, 0.5f, 0.0f,
-				-0.5f, -0.5f, 0.0f,
-				0.5f, -0.5f, 0.0f
-			};
-
 			vid = Tools.DeserializeModel();
 
 			textView.Text = "Costa" + vid.Vertexs.Count.ToString();
@@ -130,7 +122,7 @@ namespace nrcgl
 				"uniform mat4 uMVPMatrix;   \n" +
 				"void main()                  \n" +
 				"{                            \n" +
-				"   gl_Position = vec4(vertex_position, 1f);  \n" +
+				"   gl_Position = uMVPMatrix*vec4(vertex_position, 1f);  \n" +
 				"}                            \n";
 
 			string fragmentShaderSrc = "precision mediump float;             \n" +
@@ -140,9 +132,17 @@ namespace nrcgl
 				"  gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);  \n" +
 				"}                                            \n";
 
-			shader = new Shader(ref vertexShaderSrc, ref fragmentShaderSrc);
+			shader = 
+				new Shader(
+					ref vertexShaderSrc, 
+					ref fragmentShaderSrc);
+			
 			// initialize buffer
-			VertexBuffer = new VertexFloatBuffer(VertexFormat.XYZ_NORMAL_COLOR, 7650, BeginMode.Lines);
+			VertexBuffer = 
+				new VertexFloatBuffer(
+					VertexFormat.XYZ_NORMAL_COLOR, 
+					7650, 
+					BeginMode.Lines);
 
 			DrawBufer(VertexBuffer, VertexFormat.XYZ_NORMAL_COLOR);
 
@@ -150,6 +150,9 @@ namespace nrcgl
 			VertexBuffer.Load();
 
 			VertexBuffer.Bind(shader);
+
+			// Initialize GL
+			GL.Enable(EnableCap.DepthTest);
 
 			GL.Viewport(0, 0, viewportWidth, viewportHeight);
 
@@ -164,66 +167,25 @@ namespace nrcgl
 															0.5f, 
 															1000.0f);
 
-			//RenderTriangle ();
-		}
-
-
-		void RenderTriangle ()
-		{
-			GL.ClearColor (0.0f, 0.0f, 0.0f, 1);
-			GL.Clear(ClearBufferMask.ColorBufferBit |
-				ClearBufferMask.DepthBufferBit);
-
-			GL.Enable(EnableCap.DepthTest);
-
-
 			// Set the camera position (View matrix)
-			mViewMatrix = Matrix4.LookAt(0, 0, -3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+			mViewMatrix = Matrix4.LookAt(0, 0, -100, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
 
 			// Calculate the projection and view transformation
 			mModelViewProjectionMatrix = Matrix4.Mult(mProjectionMatrix, mViewMatrix);
 
-			//GL.UseProgram (mProgramHandle);
 			GL.UseProgram (shader.Program);
 
-			// get handle to vertex shader's vPosition member
-			mPositionHandle = GL.GetAttribLocation(shader.Program, new StringBuilder("vertex_position"));
+			// get handle to shape's transformation matrix
+			mMVPMatrixHandle = GL.GetUniformLocation(shader.Program, "uMVPMatrix");
 
-			// Enable a handle to the triangle vertices
-			GL.EnableVertexAttribArray (mPositionHandle);
+			// Apply the projection and view transformation
+			GL.UniformMatrix4(mMVPMatrixHandle, false, ref mModelViewProjectionMatrix);
 
-			// pin the data, so that GC doesn't move them, while used
-			// by native code
-			unsafe {
-				fixed (float* pvertices = vertices) {
-					// Prepare the triangle coordinate data
-					GL.VertexAttribPointer (0, 3, All.Float, false, 0, new IntPtr (pvertices));
+			GL.UseProgram (0);
 
-					// get handle to fragment shader's vColor member
-					mColorHandle = GL.GetUniformLocation(shader.Program, new StringBuilder("vColor"));
-
-					// Set color for drawing the triangle
-					GL.Uniform4(mColorHandle, 1, color);
-
-					// get handle to shape's transformation matrix
-					mMVPMatrixHandle = GL.GetUniformLocation(shader.Program, new StringBuilder("uMVPMatrix"));
-
-					// Apply the projection and view transformation
-					GL.UniformMatrix4(mMVPMatrixHandle, false, ref mModelViewProjectionMatrix);
-
-
-
-					GL.DrawArrays (All.Triangles, 0, 3);
-
-					GL.Finish ();
-				}
-			}
-
-			// Disable vertex array
-			GL.DisableVertexAttribArray(mPositionHandle);
-			//VertexBuffer.Bind(shader);
-			SwapBuffers ();
 		}
+
+
 
 		// this is called whenever android raises the SurfaceChanged event
 		protected override void OnResize (EventArgs e)
@@ -250,14 +212,10 @@ namespace nrcgl
 					0.5f, 
 					1000.0f);
 			
-
-			//RenderTriangle ();
-
-
-
 		}
 
-		public virtual void DrawBufer(VertexFloatBuffer buffer, VertexFormat vertexFormat)
+		public virtual void DrawBufer(VertexFloatBuffer buffer, 
+									  VertexFormat vertexFormat)
 		{
 			switch (vertexFormat)
 			{
@@ -333,12 +291,35 @@ namespace nrcgl
 		{
 			base.OnRenderFrame (e);
 
-			GL.ClearColor (0.0f, 0.0f, 0.6f, 1);
+			MakeCurrent ();
+
+			GL.ClearColor (0.0f, 0.0f, 0.0f + rotate, 1f);
 			GL.Clear(ClearBufferMask.ColorBufferBit |
 				ClearBufferMask.DepthBufferBit);
 
+			mModelViewProjectionMatrix = 
+				Matrix4.Mult (Matrix4.Scale (rotate), 
+							  mViewMatrix) * mProjectionMatrix;
+			rotate += 0.01f;
+
+			textView.Text = shader.VertexSource.Substring(shader.VertexSource.Length - 100);
 
 
+			//mMVPMatrixHandle = GL.GetUniformLocation(shader.Program, new StringBuilder("uMVPMatrix"));
+
+
+			GL.UseProgram (shader.Program);
+
+			mMVPMatrixHandle = GL.GetUniformLocation (shader.Program, "uMVPMatrix");
+			GL.UniformMatrix4(mMVPMatrixHandle, false, ref mModelViewProjectionMatrix);
+
+			GL.UseProgram (0);
+
+
+
+
+
+			VertexBuffer.Bind(shader);
 
 			SwapBuffers();
 		}

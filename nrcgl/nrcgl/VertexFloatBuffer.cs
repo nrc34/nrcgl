@@ -79,7 +79,7 @@ namespace nrcgl.nrcgl
         private int index_position;
 
         protected float[] vertex_data;
-        protected uint[] index_data;
+        protected ushort[] index_data;
 
         public VertexFloatBuffer(VertexFormat format, int limit = 1024, 
             BeginMode drawMode = BeginMode.Triangles)
@@ -90,7 +90,7 @@ namespace nrcgl.nrcgl
             DrawMode = drawMode;
 
             vertex_data = new float[limit * AttributeCount];
-            index_data = new uint[limit];
+            index_data = new ushort[limit];
         }
 
         public void Clear()
@@ -154,7 +154,7 @@ namespace nrcgl.nrcgl
             AttributeCount = Stride / sizeof(float);
         }
 
-        public void Set(float[] vertices, uint[] indices)
+        public void Set(float[] vertices, ushort[] indices)
         {
             Clear();
             vertex_data = vertices;
@@ -177,7 +177,7 @@ namespace nrcgl.nrcgl
 
             GL.GenBuffers(1, out id_ebo);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, id_ebo);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(index_position * sizeof(uint)), index_data, UsageHint);
+            GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(index_position * sizeof(ushort)), index_data, UsageHint);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
 
             IsLoaded = true;
@@ -190,13 +190,13 @@ namespace nrcgl.nrcgl
         {
             if (!IsLoaded) return;
 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, id_vbo);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertex_position * sizeof(float)), vertex_data, UsageHint);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+			GL.BindBuffer(BufferTarget.ArrayBuffer, id_vbo);
+			GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertex_position * sizeof(float)), vertex_data, UsageHint);
+			GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, id_ebo);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(index_position * sizeof(uint)), index_data, UsageHint);
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
+			GL.BindBuffer(BufferTarget.ElementArrayBuffer, id_ebo);
+			GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(index_position * sizeof(ushort)), index_data, UsageHint);
+			GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
         }
 
         /// <summary>
@@ -211,7 +211,7 @@ namespace nrcgl.nrcgl
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertex_position * sizeof(float)), IntPtr.Zero, UsageHint);
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, id_ebo);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(index_position * sizeof(uint)), IntPtr.Zero, UsageHint);
+            GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(index_position * sizeof(ushort)), IntPtr.Zero, UsageHint);
 
             GL.DeleteBuffers(1, ref id_vbo);
             GL.DeleteBuffers(1, ref id_ebo);
@@ -313,8 +313,9 @@ namespace nrcgl.nrcgl
                     break;
             }
 
+
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, id_ebo);
-			GL.DrawElements(DrawMode, index_position, DrawElementsType.UnsignedInt, 0);
+			GL.DrawElements(DrawMode, index_position, DrawElementsType.UnsignedShort, IntPtr.Zero);
 
             GL.DisableVertexAttribArray(0);
             GL.DisableVertexAttribArray(1);
@@ -338,20 +339,20 @@ namespace nrcgl.nrcgl
         {
             int count = vertex_position / AttributeCount;
             index_position = 0;
-            for (uint i = 0; i < count; i++)
+            for (ushort i = 0; i < count; i++)
             {
                 index_data[index_position++] = i;
             }
         }
 
-        public void AddIndex(uint indexA, uint indexB, uint indexC)
+        public void AddIndex(ushort indexA, ushort indexB, ushort indexC)
         {
             index_data[index_position++] = indexA;
             index_data[index_position++] = indexB;
             index_data[index_position++] = indexC;
         }
 
-        public void AddIndices(uint[] indices)
+        public void AddIndices(ushort[] indices)
         {
             for (int i = 0; i < indices.Length; i++)
             {
