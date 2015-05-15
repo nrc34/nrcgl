@@ -79,8 +79,8 @@
   <ItemGroup>
     <AndroidAsset Include="Assets\Models\Torus.xml" />
     <AndroidAsset Include="Assets\Torus.xml" />
-    <AndroidAsset Include="Assets\vShader_Torus.vs" />
-    <AndroidAsset Include="Assets\fShader_Torus.fs" />
     <AndroidAsset Include="Assets\Torus3D_smooth.xml" />
+    <AndroidAsset Include="Assets\fShader_Torus.txt" />
+    <AndroidAsset Include="Assets\vShader_Torus.txt" />
   </ItemGroup>
 </Project>

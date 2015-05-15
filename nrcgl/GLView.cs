@@ -27,6 +27,9 @@ namespace nrcgl
 		int mPMatrixHandle;
 		int mMMatrixHandle;
 
+		float xTouch;
+		float yTouch;
+
 		Matrix4 mProjectionMatrix;
 		Matrix4 mViewMatrix;
 		Matrix4 mModelViewProjectionMatrix;
@@ -35,7 +38,8 @@ namespace nrcgl
 		VertexFloatBuffer VertexBuffer;
 		VertexsIndicesData vid;
 
-		float rotate = 0f;
+		float rotateY = 0f;
+		float rotateX = 0f;
 
 
 
@@ -184,8 +188,6 @@ namespace nrcgl
 
 		}
 
-
-
 		// this is called whenever android raises the SurfaceChanged event
 		protected override void OnResize (EventArgs e)
 		{
@@ -282,7 +284,6 @@ namespace nrcgl
 		public void GiveTextView(TextView textView)
 		{
 			this.textView = textView;
-
 		}
 
 
@@ -296,18 +297,23 @@ namespace nrcgl
 			GL.Clear(ClearBufferMask.ColorBufferBit |
 				ClearBufferMask.DepthBufferBit);
 
+			var mModelMatrix = 
+				Matrix4.Rotate (Quaternion.FromAxisAngle(Vector3.UnitY, rotateY * 3) * 
+								Quaternion.FromAxisAngle(Vector3.UnitX, rotateX * 3));
+			
+			var mModelViewMatrix = Matrix4.Mult(mModelMatrix, mViewMatrix);
+
 			mModelViewProjectionMatrix = 
-				Matrix4.Mult (Matrix4.CreateRotationY (rotate * 3), 
-							  mViewMatrix) * mProjectionMatrix;
-			rotate += 0.01f;
+				Matrix4.Mult (mModelMatrix,  mViewMatrix) * mProjectionMatrix;
+			
 
 			//textView.Text = shader.VertexSource.Substring(shader.VertexSource.Length - 100);
 
 
 			GL.UseProgram (shader.Program);
 
-			var mModelMatrix = Matrix4.CreateRotationY (rotate * 3);
-			var mModelViewMatrix = Matrix4.Mult(mModelMatrix, mViewMatrix);
+
+
 
 
 			GL.UniformMatrix4 (mMVMatrixHandle, false, ref mModelViewMatrix);
@@ -320,6 +326,34 @@ namespace nrcgl
 			GL.UseProgram (0);
 			SwapBuffers();
 		}
+
+
+		public override bool OnTouchEvent (MotionEvent e)
+		{
+			float speed = 0.004f;
+
+			switch (e.Action) {
+
+			case MotionEventActions.Down:
+				xTouch = e.GetX ();
+				yTouch = e.GetY ();
+				break;
+
+			case MotionEventActions.Move:
+				rotateY += speed * (e.GetX() - xTouch);
+				xTouch = e.GetX ();
+				rotateX -= speed * (e.GetY() - yTouch);
+				yTouch = e.GetY ();
+				break;
+
+			default:
+				break;
+			}
+
+			return true;
+		}
+
+
 
 	}
 }

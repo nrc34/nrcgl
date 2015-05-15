@@ -1,10 +1,11 @@
 ﻿<Properties StartupItem="nrcgl\nrcgl.csproj" GitUserInfo="UsingGIT">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.Nexus 5 (KitKat)" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="nrcgl\Assets\fShader_Torus.fs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.02939e3c" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="nrcgl\GLView.cs">
     <Files>
-      <File FileName="nrcgl\GLView.cs" Line="102" Column="47" />
-      <File FileName="nrcgl\Assets\fShader_Torus.fs" Line="44" Column="41" />
-      <File FileName="nrcgl\Assets\vShader_Torus.vs" Line="24" Column="28" />
+      <File FileName="nrcgl\GLView.cs" Line="337" Column="19" />
+      <File FileName="nrcgl\MainActivity.cs" Line="35" Column="4" />
+      <File FileName="nrcgl\Assets\fShader_Torus.txt" Line="1" Column="1" />
+      <File FileName="nrcgl\Assets\vShader_Torus.txt" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
