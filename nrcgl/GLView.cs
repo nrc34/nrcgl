@@ -156,7 +156,7 @@ namespace nrcgl
 															1000.0f);
 
 			// Set the camera position (View matrix)
-			mViewMatrix = Matrix4.LookAt(0, 5, -10, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+			mViewMatrix = Matrix4.LookAt(0, 3, -5, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
 
 			// Calculate the projection and view transformation
 			mModelViewProjectionMatrix = Matrix4.Mult(mProjectionMatrix, mViewMatrix);
@@ -170,6 +170,7 @@ namespace nrcgl
 			mMVMatrixHandle = GL.GetUniformLocation(shader.Program, "modelview_matrix");
 			mPMatrixHandle = GL.GetUniformLocation(shader.Program, "projection_matrix");
 			mMMatrixHandle = GL.GetUniformLocation(shader.Program, "model_matrix");
+			mMVPMatrixHandle = GL.GetUniformLocation(shader.Program, "mvp_matrix");
 			//model_matrix
 			// Apply the projection and view transformation
 			//GL.UniformMatrix4(mMVPMatrixHandle, false, ref mModelViewProjectionMatrix);
@@ -177,6 +178,7 @@ namespace nrcgl
 			GL.UniformMatrix4 (mMVMatrixHandle, false, ref mModelViewMatrix);
 			GL.UniformMatrix4 (mPMatrixHandle, false, ref mProjectionMatrix);
 			GL.UniformMatrix4 (mMMatrixHandle, false, ref mModelMatrix);
+			GL.UniformMatrix4 (mMVPMatrixHandle, false, ref mModelViewProjectionMatrix);
 
 			GL.UseProgram (0);
 
@@ -187,12 +189,12 @@ namespace nrcgl
 		// this is called whenever android raises the SurfaceChanged event
 		protected override void OnResize (EventArgs e)
 		{
-			viewportHeight = Height;
-			viewportWidth = Width;
-
 			// the surface change event makes your context
 			// not be current, so be sure to make it current again
 			MakeCurrent ();
+
+			viewportHeight = Height;
+			viewportWidth = Width;
 
 			// Adjust the viewport based on geometry changes,
 			// such as screen rotation
@@ -290,13 +292,13 @@ namespace nrcgl
 
 			MakeCurrent ();
 
-			GL.ClearColor (0.0f, 0.0f, 0.6f, 1f);
+			GL.ClearColor (0.0f, 0.0f, 0.0f, 1f);
 			GL.Clear(ClearBufferMask.ColorBufferBit |
 				ClearBufferMask.DepthBufferBit);
 
-//			mModelViewProjectionMatrix = 
-//				Matrix4.Mult (Matrix4.CreateRotationY (rotate * 12), 
-//							  mViewMatrix) * mProjectionMatrix;
+			mModelViewProjectionMatrix = 
+				Matrix4.Mult (Matrix4.CreateRotationY (rotate * 3), 
+							  mViewMatrix) * mProjectionMatrix;
 			rotate += 0.01f;
 
 			//textView.Text = shader.VertexSource.Substring(shader.VertexSource.Length - 100);
@@ -304,12 +306,14 @@ namespace nrcgl
 
 			GL.UseProgram (shader.Program);
 
-			var mModelMatrix = Matrix4.CreateRotationY (rotate * 12);
+			var mModelMatrix = Matrix4.CreateRotationY (rotate * 3);
 			var mModelViewMatrix = Matrix4.Mult(mModelMatrix, mViewMatrix);
+
 
 			GL.UniformMatrix4 (mMVMatrixHandle, false, ref mModelViewMatrix);
 			GL.UniformMatrix4 (mMMatrixHandle, false, ref mModelMatrix);
 
+			GL.UniformMatrix4 (mMVPMatrixHandle, false, ref mModelViewProjectionMatrix);
 
 			VertexBuffer.Bind(shader);
 

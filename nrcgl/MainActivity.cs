@@ -34,7 +34,7 @@ namespace nrcgl
 			base.OnCreate (bundle);
 
 
-			input = Assets.Open ("Torus.xml");
+			input = Assets.Open ("Torus3D_smooth.xml");
 			vShader = Assets.Open ("vShader_Torus.vs");
 			fShader = Assets.Open ("fShader_Torus.fs");
 			/// Inflate our UI from its XML layout description
