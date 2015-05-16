@@ -3,6 +3,7 @@ using nrcgl.nrcgl;
 using System.Xml.Serialization;
 using Java.IO;
 using System.IO;
+using OpenTK;
 
 namespace nrcgl
 {
@@ -19,6 +20,11 @@ namespace nrcgl
 			reader.Close();
 
 			return vertexsIndicesData;
+		}
+
+		public static double Distance(double a, double b)
+		{
+			return Math.Sqrt (Math.Pow (a, 2) + Math.Pow (b, 2));
 		}
 	}
 }

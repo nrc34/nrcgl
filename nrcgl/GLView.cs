@@ -13,6 +13,7 @@ using Android.Content;
 using nrcgl.nrcgl;
 using Android.Widget;
 using System.IO;
+using System.Threading;
 
 namespace nrcgl
 {
@@ -62,7 +63,7 @@ namespace nrcgl
 
 		void Init ()
 		{
-			Run ();
+			Run (60);
 		}
 
 		// This method is called everytime the context needs
@@ -220,6 +221,7 @@ namespace nrcgl
 			
 		}
 
+
 		public virtual void DrawBufer(VertexFloatBuffer buffer, 
 									  VertexFormat vertexFormat)
 		{
@@ -294,31 +296,43 @@ namespace nrcgl
 
 		protected override void OnRenderFrame (FrameEventArgs e)
 		{
+			
 			base.OnRenderFrame (e);
-
-			MakeCurrent ();
 
 			GL.ClearColor (0.0f, 0.0f, 0.0f, 1f);
 			GL.Clear(ClearBufferMask.ColorBufferBit |
 				ClearBufferMask.DepthBufferBit);
 
+
+			GL.UseProgram (shader.Program);
+
+			VertexBuffer.Bind(shader);
+
+			GL.UseProgram (0);
+
+			SwapBuffers();
+		}
+
+
+		protected override void OnUpdateFrame (FrameEventArgs e)
+		{
+			base.OnUpdateFrame (e);
+
+			//textView.Text = "ups: "+(1/e.Time).ToString ();
+
 			var mModelMatrix = Matrix4.Scale(scale) *
 				Matrix4.Rotate (Quaternion.FromAxisAngle(Vector3.UnitY, rotateY * 3) * 
-								Quaternion.FromAxisAngle(Vector3.UnitX, rotateX * 3));
-			
+					Quaternion.FromAxisAngle(Vector3.UnitX, rotateX * 3));
+
 			var mModelViewMatrix = Matrix4.Mult(mModelMatrix, mViewMatrix);
 
 			mModelViewProjectionMatrix = 
 				Matrix4.Mult (mModelMatrix,  mViewMatrix) * mProjectionMatrix;
-			
+
 
 			//textView.Text = shader.VertexSource.Substring(shader.VertexSource.Length - 100);
 
-
 			GL.UseProgram (shader.Program);
-
-
-
 
 
 			GL.UniformMatrix4 (mMVMatrixHandle, false, ref mModelViewMatrix);
@@ -329,14 +343,12 @@ namespace nrcgl
 			VertexBuffer.Bind(shader);
 
 			GL.UseProgram (0);
-			SwapBuffers();
 		}
 
 
 		public override bool OnTouchEvent (MotionEvent e)
 		{
 			textView.Text = e.PointerCount.ToString ();
-
 
 			if (e.PointerCount == 1) {
 
@@ -365,26 +377,33 @@ namespace nrcgl
 				switch (e.Action) {
 
 				case MotionEventActions.Pointer2Down:
-					distTouchZero = Math.Abs (e.GetX (0) - e.GetX (1));
+					//distTouchZero = Math.Abs (e.GetX (0) - e.GetX (1))
+					distTouchZero = 
+						(float)Tools.Distance(e.GetX (0) - e.GetX (1),
+									   e.GetY (0) - e.GetY (1))
+									/ scale;
+					
 					pointer1ID = e.GetPointerId (0);
 					pointer2ID = e.GetPointerId (1);
 					break;
 
 				case MotionEventActions.Move:
-					float scaleStore = scale;
-					scale = (distTouch / distTouchZero);
-						
+					
 					try {
 
 						distTouch = 
-							Math.Abs (e.GetX (e.FindPointerIndex(pointer1ID)) 
-								- e.GetX (e.FindPointerIndex(pointer2ID)));
+							(float)Tools.Distance(e.GetX (e.FindPointerIndex(pointer1ID)) - e.GetX (e.FindPointerIndex(pointer2ID)),
+								e.GetY (e.FindPointerIndex(pointer1ID)) - e.GetY (e.FindPointerIndex(pointer2ID)));
+//							Math.Abs (e.GetX (e.FindPointerIndex(pointer1ID)) 
+//								- e.GetX (e.FindPointerIndex(pointer2ID)));
 
 					} catch (Exception) {
 
 						pointer1ID = e.GetPointerId (0);
 						pointer2ID = e.GetPointerId (1);
 					}
+
+					scale = (distTouch / distTouchZero);
 
 					break;
 
