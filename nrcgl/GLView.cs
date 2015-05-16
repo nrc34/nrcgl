@@ -374,10 +374,18 @@ namespace nrcgl
 					float scaleStore = scale;
 					scale = (distTouch / distTouchZero);
 						
+					try {
 
-					distTouch = 
-						Math.Abs (e.GetX (e.FindPointerIndex(pointer1ID)) 
+						distTouch = 
+							Math.Abs (e.GetX (e.FindPointerIndex(pointer1ID)) 
 								- e.GetX (e.FindPointerIndex(pointer2ID)));
+
+					} catch (Exception) {
+
+						pointer1ID = e.GetPointerId (0);
+						pointer2ID = e.GetPointerId (1);
+					}
+
 					break;
 
 				default:
@@ -387,7 +395,7 @@ namespace nrcgl
 				textView.Text += ": " + 
 					distTouchZero.ToString() + 
 					" : "+ distTouch.ToString ();
-			}
+			} 
 
 			return true;
 		}
