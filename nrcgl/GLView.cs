@@ -3,7 +3,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 
 using OpenTK;
-//using OpenTK.Graphics;
 using OpenTK.Graphics.ES20;
 using OpenTK.Platform;
 using OpenTK.Platform.Android;
@@ -40,6 +39,12 @@ namespace nrcgl
 
 		float rotateY = 0f;
 		float rotateX = 0f;
+
+		float distTouch;
+		float distTouchZero;
+		int pointer1ID;
+		int pointer2ID;
+		float scale = 1f;
 
 
 
@@ -297,7 +302,7 @@ namespace nrcgl
 			GL.Clear(ClearBufferMask.ColorBufferBit |
 				ClearBufferMask.DepthBufferBit);
 
-			var mModelMatrix = 
+			var mModelMatrix = Matrix4.Scale(scale) *
 				Matrix4.Rotate (Quaternion.FromAxisAngle(Vector3.UnitY, rotateY * 3) * 
 								Quaternion.FromAxisAngle(Vector3.UnitX, rotateX * 3));
 			
@@ -330,24 +335,58 @@ namespace nrcgl
 
 		public override bool OnTouchEvent (MotionEvent e)
 		{
-			float speed = 0.004f;
+			textView.Text = e.PointerCount.ToString ();
 
-			switch (e.Action) {
 
-			case MotionEventActions.Down:
-				xTouch = e.GetX ();
-				yTouch = e.GetY ();
-				break;
+			if (e.PointerCount == 1) {
 
-			case MotionEventActions.Move:
-				rotateY += speed * (e.GetX() - xTouch);
-				xTouch = e.GetX ();
-				rotateX -= speed * (e.GetY() - yTouch);
-				yTouch = e.GetY ();
-				break;
+				float speed = 0.004f;
 
-			default:
-				break;
+
+				switch (e.Action) {
+
+				case MotionEventActions.Down:
+					xTouch = e.GetX ();
+					yTouch = e.GetY ();
+					break;
+
+				case MotionEventActions.Move:
+					rotateY += speed * (e.GetX () - xTouch);
+					xTouch = e.GetX ();
+					rotateX -= speed * (e.GetY () - yTouch);
+					yTouch = e.GetY ();
+					break;
+
+				default:
+					break;
+				}
+			} else if (e.PointerCount == 2) {
+
+				switch (e.Action) {
+
+				case MotionEventActions.Pointer2Down:
+					distTouchZero = Math.Abs (e.GetX (0) - e.GetX (1));
+					pointer1ID = e.GetPointerId (0);
+					pointer2ID = e.GetPointerId (1);
+					break;
+
+				case MotionEventActions.Move:
+					float scaleStore = scale;
+					scale = (distTouch / distTouchZero);
+						
+
+					distTouch = 
+						Math.Abs (e.GetX (e.FindPointerIndex(pointer1ID)) 
+								- e.GetX (e.FindPointerIndex(pointer2ID)));
+					break;
+
+				default:
+					break;
+				}
+
+				textView.Text += ": " + 
+					distTouchZero.ToString() + 
+					" : "+ distTouch.ToString ();
 			}
 
 			return true;
