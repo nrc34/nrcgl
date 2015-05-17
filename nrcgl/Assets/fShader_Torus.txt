@@ -8,6 +8,8 @@ varying vec4 normal;
 varying vec2 uv;
 varying vec4 worldposition;
 
+uniform vec4 sb;
+
 void main()
 {
 

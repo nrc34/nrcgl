@@ -29,6 +29,13 @@ namespace nrcgl
 		public static Stream vShader;
 		public static Stream fShader;
 
+		public TextView textView;
+
+		public SeekBar mSeekBar1;
+		public SeekBar mSeekBar2;
+		public SeekBar mSeekBar3;
+		public SeekBar mSeekBar4;
+
 		protected override void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
@@ -41,13 +48,18 @@ namespace nrcgl
 			// - should match filename res/layout/main.axml ?
 			SetContentView (Resource.Layout.Main);
 
-			var textView = FindViewById<TextView> (Resource.Id.textView1);
+			textView = FindViewById<TextView> (Resource.Id.textView1);
 			textView.Text = "Nuno Ramalho"; //vid.Vertexs.Count.ToString();
+
+			mSeekBar1 = FindViewById<SeekBar> (Resource.Id.seekBar1);
+			mSeekBar2 = FindViewById<SeekBar> (Resource.Id.seekBar2);
+			mSeekBar3 = FindViewById<SeekBar> (Resource.Id.seekBar3);
+			mSeekBar4 = FindViewById<SeekBar> (Resource.Id.seekBar4);
 
 			// Load the view
 			var glView = FindViewById<GLView> (Resource.Id.glview);
 
-			glView.GiveTextView (textView);
+			glView.SetActivity (this);
 
 
 

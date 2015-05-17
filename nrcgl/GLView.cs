@@ -19,13 +19,16 @@ namespace nrcgl
 {
 	class GLView : AndroidGameView
 	{
-		TextView textView;
+		MainActivity mainActivity;
+
+		bool move2ShaderEditor = false;
 
 		int viewportWidth, viewportHeight;
 		int mMVPMatrixHandle;
 		int mMVMatrixHandle;
 		int mPMatrixHandle;
 		int mMMatrixHandle;
+		int mSeekBarsHandle;
 
 		float xTouch;
 		float yTouch;
@@ -117,7 +120,7 @@ namespace nrcgl
 
 			vid = Tools.DeserializeModel(MainActivity.input);
 
-			textView.Text = "Costa" + vid.Vertexs.Count.ToString();
+			mainActivity.textView.Text = "Costa" + vid.Vertexs.Count.ToString();
 
 			// Vertex and fragment shaders
 			StreamReader vsReader = new StreamReader(MainActivity.vShader);
@@ -127,6 +130,15 @@ namespace nrcgl
 			string fragmentShaderSrc = fsReader.ReadToEnd ();
 
 			// initialize shader
+
+			string editorVShader = mainActivity.Intent.GetStringExtra ("vShader");
+			string editorFShader = mainActivity.Intent.GetStringExtra ("fShader");
+
+			if (editorVShader != null) {
+				vertexShaderSrc = editorVShader;
+				fragmentShaderSrc = editorFShader;
+			}
+
 			shader = 
 				new Shader(
 					ref vertexShaderSrc, 
@@ -176,14 +188,11 @@ namespace nrcgl
 
 			GL.UseProgram (shader.Program);
 
-			// get handle to shape's transformation matrix
 			mMVMatrixHandle = GL.GetUniformLocation(shader.Program, "modelview_matrix");
 			mPMatrixHandle = GL.GetUniformLocation(shader.Program, "projection_matrix");
 			mMMatrixHandle = GL.GetUniformLocation(shader.Program, "model_matrix");
 			mMVPMatrixHandle = GL.GetUniformLocation(shader.Program, "mvp_matrix");
-			//model_matrix
-			// Apply the projection and view transformation
-			//GL.UniformMatrix4(mMVPMatrixHandle, false, ref mModelViewProjectionMatrix);
+			mSeekBarsHandle = GL.GetUniformLocation(shader.Program, "sb");
 
 			GL.UniformMatrix4 (mMVMatrixHandle, false, ref mModelViewMatrix);
 			GL.UniformMatrix4 (mPMatrixHandle, false, ref mProjectionMatrix);
@@ -210,8 +219,6 @@ namespace nrcgl
 
 			float ratio = (float) viewportWidth / viewportHeight;
 
-			// this projection matrix is applied to object coordinates
-			// in the onDrawFrame() method
 			mProjectionMatrix = 
 				OpenTK.Matrix4.
 				CreatePerspectiveFieldOfView(MathHelper.PiOver4,
@@ -288,9 +295,9 @@ namespace nrcgl
 			}
 		}
 
-		public void GiveTextView(TextView textView)
+		public void SetActivity(MainActivity mainActivity)
 		{
-			this.textView = textView;
+			this.mainActivity = mainActivity;
 		}
 
 
@@ -318,6 +325,19 @@ namespace nrcgl
 		{
 			base.OnUpdateFrame (e);
 
+			if(move2ShaderEditor){
+
+				move2ShaderEditor = false;
+
+				Intent intent = new Intent(mainActivity, typeof(ShaderEditor));
+
+				intent.PutExtra ("vShader", shader.VertexSource);
+				intent.PutExtra ("fShader", shader.FragmentSource);
+
+				mainActivity.StartActivity (intent);
+				mainActivity.Finish ();
+			}
+
 			//textView.Text = "ups: "+(1/e.Time).ToString ();
 
 			var mModelMatrix = Matrix4.Scale(scale) *
@@ -330,10 +350,18 @@ namespace nrcgl
 				Matrix4.Mult (mModelMatrix,  mViewMatrix) * mProjectionMatrix;
 
 
-			//textView.Text = shader.VertexSource.Substring(shader.VertexSource.Length - 100);
-
 			GL.UseProgram (shader.Program);
 
+			GL.Uniform4(mSeekBarsHandle, 
+				new Vector4(mainActivity.mSeekBar1.Progress / 255f,
+							mainActivity.mSeekBar2.Progress / 255f, 
+							mainActivity.mSeekBar3.Progress / 255f, 
+							mainActivity.mSeekBar4.Progress / 255f));
+			
+			mainActivity.textView.Text = "s1:"+ mainActivity.mSeekBar1.Progress.ToString();
+			mainActivity.textView.Text += " s2:" + mainActivity.mSeekBar2.Progress.ToString();
+			mainActivity.textView.Text += " s3:" + mainActivity.mSeekBar3.Progress.ToString();
+			mainActivity.textView.Text += " s4:" + mainActivity.mSeekBar4.Progress.ToString();
 
 			GL.UniformMatrix4 (mMVMatrixHandle, false, ref mModelViewMatrix);
 			GL.UniformMatrix4 (mMMatrixHandle, false, ref mModelMatrix);
@@ -348,7 +376,7 @@ namespace nrcgl
 
 		public override bool OnTouchEvent (MotionEvent e)
 		{
-			textView.Text = e.PointerCount.ToString ();
+			//mainActivity.textView.Text = e.PointerCount.ToString ();
 
 			if (e.PointerCount == 1) {
 
@@ -377,7 +405,6 @@ namespace nrcgl
 				switch (e.Action) {
 
 				case MotionEventActions.Pointer2Down:
-					//distTouchZero = Math.Abs (e.GetX (0) - e.GetX (1))
 					distTouchZero = 
 						(float)Tools.Distance(e.GetX (0) - e.GetX (1),
 									   e.GetY (0) - e.GetY (1))
@@ -392,10 +419,11 @@ namespace nrcgl
 					try {
 
 						distTouch = 
-							(float)Tools.Distance(e.GetX (e.FindPointerIndex(pointer1ID)) - e.GetX (e.FindPointerIndex(pointer2ID)),
-								e.GetY (e.FindPointerIndex(pointer1ID)) - e.GetY (e.FindPointerIndex(pointer2ID)));
-//							Math.Abs (e.GetX (e.FindPointerIndex(pointer1ID)) 
-//								- e.GetX (e.FindPointerIndex(pointer2ID)));
+							(float)Tools.Distance(
+								e.GetX (e.FindPointerIndex(pointer1ID)) - 
+								e.GetX (e.FindPointerIndex(pointer2ID)),
+								e.GetY (e.FindPointerIndex(pointer1ID)) - 
+								e.GetY (e.FindPointerIndex(pointer2ID)));
 
 					} catch (Exception) {
 
@@ -411,10 +439,13 @@ namespace nrcgl
 					break;
 				}
 
-				textView.Text += ": " + 
-					distTouchZero.ToString() + 
-					" : "+ distTouch.ToString ();
-			} 
+//				mainActivity.textView.Text += ": " + 
+//					distTouchZero.ToString() + 
+//					" : "+ distTouch.ToString ();
+			} else if(e.PointerCount == 3){
+
+				move2ShaderEditor = true;
+			}
 
 			return true;
 		}
