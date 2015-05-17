@@ -34,6 +34,7 @@
                         android:layout_column="0"
                         android:id="@+id/editTextVShader"
                         android:scrollbars="vertical"
+                        android:textColor="@android:color/holo_green_dark"
                         android:layout_width="match_parent" />
                 </TableRow>
                 <TableRow
@@ -41,6 +42,7 @@
                     <EditText
                         android:inputType="textMultiLine"
                         android:layout_column="0"
+                        android:textColor="@android:color/holo_green_dark"
                         android:id="@+id/editTextFShader" />
                 </TableRow>
                 <TableRow

@@ -67,23 +67,20 @@ namespace nrcgl
 
 			glView.SetActivity (this);
 
-
-
-			
 		}
 
 		protected override void OnPause ()
 		{
 			// never forget to do this!
 			base.OnPause ();
-			(FindViewById (Resource.Id.glview) as GLView).Pause ();
+			(FindViewById<GLView> (Resource.Id.glview)).Pause ();
 		}
 
 		protected override void OnResume ()
 		{
 			// never forget to do this!
 			base.OnResume ();
-			(FindViewById (Resource.Id.glview) as GLView).Resume ();
+			(FindViewById<GLView> (Resource.Id.glview)).Resume ();
 		}
 	}
 }

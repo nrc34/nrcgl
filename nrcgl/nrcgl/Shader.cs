@@ -64,7 +64,8 @@ namespace nrcgl.nrcgl
 			success = Build(out infovShader, out infoFShader);
         }
 
-		private bool Build(out string infoVShader, out string infoFShader)
+		private bool Build(out string infoVShader, 
+			               out string infoFShader)
         {
             int status_code;
             string info;
@@ -79,7 +80,9 @@ namespace nrcgl.nrcgl
             GL.ShaderSource(VertexID, VertexSource);
             GL.CompileShader(VertexID);
             GL.GetShaderInfoLog(VertexID, out info);
-            GL.GetShader(VertexID, ShaderParameter.CompileStatus, out status_code);
+            GL.GetShader(VertexID, 
+						 ShaderParameter.CompileStatus, 
+				         out status_code);
 
 			if (status_code != 1){
 				infoVShader = info;
@@ -92,7 +95,9 @@ namespace nrcgl.nrcgl
             GL.ShaderSource(FragmentID, FragmentSource);
             GL.CompileShader(FragmentID);
             GL.GetShaderInfoLog(FragmentID, out info);
-            GL.GetShader(FragmentID, ShaderParameter.CompileStatus, out status_code);
+            GL.GetShader(FragmentID, 
+						 ShaderParameter.CompileStatus, 
+				         out status_code);
 
 			if (status_code != 1) {
 				infoVShader = info;
