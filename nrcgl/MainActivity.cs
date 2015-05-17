@@ -29,6 +29,9 @@ namespace nrcgl
 		public static Stream vShader;
 		public static Stream fShader;
 
+		public TextView mTextViewInfoVShader;
+		public TextView mTextViewInfoFShader;
+
 		public TextView textView;
 
 		public SeekBar mSeekBar1;
@@ -49,7 +52,10 @@ namespace nrcgl
 			SetContentView (Resource.Layout.Main);
 
 			textView = FindViewById<TextView> (Resource.Id.textView1);
-			textView.Text = "Nuno Ramalho"; //vid.Vertexs.Count.ToString();
+			mTextViewInfoVShader = 
+				FindViewById<TextView> (Resource.Id.textViewInfoVShader);
+			mTextViewInfoFShader =
+				FindViewById<TextView> (Resource.Id.textViewInfoFShader);
 
 			mSeekBar1 = FindViewById<SeekBar> (Resource.Id.seekBar1);
 			mSeekBar2 = FindViewById<SeekBar> (Resource.Id.seekBar2);

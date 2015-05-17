@@ -38,6 +38,8 @@ namespace nrcgl
 		Matrix4 mModelViewProjectionMatrix;
 
 		Shader shader;
+		bool IsShaderOK;
+
 		VertexFloatBuffer VertexBuffer;
 		VertexsIndicesData vid;
 
@@ -129,21 +131,39 @@ namespace nrcgl
 			StreamReader fsReader = new StreamReader(MainActivity.fShader);
 			string fragmentShaderSrc = fsReader.ReadToEnd ();
 
-			// initialize shader
-
-			string editorVShader = mainActivity.Intent.GetStringExtra ("vShader");
-			string editorFShader = mainActivity.Intent.GetStringExtra ("fShader");
+			// shaders from editor
+			string editorVShader = 
+				mainActivity.Intent.GetStringExtra ("vShader");
+			string editorFShader = 
+				mainActivity.Intent.GetStringExtra ("fShader");
 
 			if (editorVShader != null) {
 				vertexShaderSrc = editorVShader;
 				fragmentShaderSrc = editorFShader;
 			}
 
+			// initialize shader
+			bool success;
+			string infoVShader;
+			string infoFShader;
+
 			shader = 
 				new Shader(
 					ref vertexShaderSrc, 
-					ref fragmentShaderSrc);
+					ref fragmentShaderSrc,
+					out success,
+					out infoVShader,
+					out infoFShader);
 			
+			IsShaderOK = success;
+
+			if (!IsShaderOK) {
+				mainActivity.textView.Text ="Error compiling shaders.";
+				mainActivity.mTextViewInfoVShader.Text = infoVShader;
+				mainActivity.mTextViewInfoFShader.Text = infoFShader;
+				return;
+			}
+
 			// initialize buffer
 			VertexBuffer = 
 				new VertexFloatBuffer(
@@ -306,6 +326,18 @@ namespace nrcgl
 			
 			base.OnRenderFrame (e);
 
+			if (!IsShaderOK) {
+
+				GL.ClearColor (0.2f, 0.0f, 0.0f, 1f);
+				GL.Clear(ClearBufferMask.ColorBufferBit |
+					ClearBufferMask.DepthBufferBit);
+				
+				SwapBuffers ();
+
+				return;
+			}
+				
+
 			GL.ClearColor (0.0f, 0.0f, 0.0f, 1f);
 			GL.Clear(ClearBufferMask.ColorBufferBit |
 				ClearBufferMask.DepthBufferBit);
@@ -337,6 +369,8 @@ namespace nrcgl
 				mainActivity.StartActivity (intent);
 				mainActivity.Finish ();
 			}
+
+			if (!IsShaderOK) return;
 
 			//textView.Text = "ups: "+(1/e.Time).ToString ();
 

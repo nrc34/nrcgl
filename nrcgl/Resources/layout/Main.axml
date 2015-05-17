@@ -8,9 +8,9 @@
     <ScrollView
         android:minWidth="25dp"
         android:minHeight="25dp"
-        android:layout_weight="30"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="30"
         android:id="@+id/scrollView1">
         <TableLayout
             android:minWidth="25px"
@@ -76,7 +76,28 @@
                     android:id="@+id/textView1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_column="0" />
+                    android:layout_column="0"
+                    android:scrollHorizontally="false" />
+            </TableRow>
+            <TableRow
+                android:id="@+id/tableRow6">
+                <TextView
+                    android:id="@+id/textViewInfoVShader"
+                    android:inputType="textMultiLine"
+                    android:ellipsize="none"
+                    android:scrollHorizontally="false"
+                    android:maxLines="20"
+                    android:maxWidth="300dp" />
+            </TableRow>
+            <TableRow
+                android:id="@+id/tableRow7">
+                <TextView
+                    android:id="@+id/textViewInfoFShader"
+                    android:inputType="textMultiLine"
+                    android:ellipsize="none"
+                    android:scrollHorizontally="false"
+                    android:maxLines="20"
+                    android:maxWidth="300dp" />
             </TableRow>
         </TableLayout>
     </ScrollView>

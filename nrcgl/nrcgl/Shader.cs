@@ -52,18 +52,25 @@ namespace nrcgl.nrcgl
         public int ColorLocation { get; set; }
 
 
-        public Shader(ref string vs, ref string fs)
+		public Shader(ref string vs, 
+					  ref string fs, 
+					  out bool success, 
+			          out string infovShader, 
+					  out string infoFShader)
         {
             VertexSource = vs;
             FragmentSource = fs;
 
-            Build();
+			success = Build(out infovShader, out infoFShader);
         }
 
-        private void Build()
+		private bool Build(out string infoVShader, out string infoFShader)
         {
             int status_code;
             string info;
+			bool success = true;
+			infoVShader = string.Empty;
+			infoFShader = string.Empty;
 
             VertexID = GL.CreateShader(ShaderType.VertexShader);
             FragmentID = GL.CreateShader(ShaderType.FragmentShader);
@@ -74,8 +81,12 @@ namespace nrcgl.nrcgl
             GL.GetShaderInfoLog(VertexID, out info);
             GL.GetShader(VertexID, ShaderParameter.CompileStatus, out status_code);
 
-            if (status_code != 1)
-                throw new ApplicationException(info);
+			if (status_code != 1){
+				infoVShader = info;
+				success = false;
+				//throw new ApplicationException(info);
+			}
+                
 
             // Compile fragment shader
             GL.ShaderSource(FragmentID, FragmentSource);
@@ -83,8 +94,12 @@ namespace nrcgl.nrcgl
             GL.GetShaderInfoLog(FragmentID, out info);
             GL.GetShader(FragmentID, ShaderParameter.CompileStatus, out status_code);
 
-            if (status_code != 1)
-                throw new ApplicationException(info);
+			if (status_code != 1) {
+				infoVShader = info;
+				success = false;
+				//throw new ApplicationException(info);
+			}
+                
 
             Program = GL.CreateProgram();
             GL.AttachShader(Program, FragmentID);
@@ -109,6 +124,8 @@ namespace nrcgl.nrcgl
                 GL.BindAttribLocation(Program, ColorLocation, "vertex_color");
 
             GL.UseProgram(0);
+
+			return success;
         }
 
         public void Dispose()
