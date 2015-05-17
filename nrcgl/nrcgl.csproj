@@ -58,6 +58,7 @@
     <Compile Include="nrcgl\Tools.cs" />
     <Compile Include="nrcgl\Camera.cs" />
     <Compile Include="ShaderEditor.cs" />
+    <Compile Include="nrcgl\SpanInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

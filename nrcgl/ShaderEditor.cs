@@ -11,6 +11,9 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.Views.InputMethods;
+using Android.Text;
+using Android.Text.Style;
+using Android.Graphics;
 
 namespace nrcgl
 {
@@ -32,8 +35,61 @@ namespace nrcgl
 			mTextViewVShader = FindViewById<TextView> (Resource.Id.editTextVShader);
 			mTextViewFShader = FindViewById<TextView> (Resource.Id.editTextFShader);
 
+			#region multicolor vShadorText
+			var span = new SpannableString (Intent.GetStringExtra ("vShader"));
 
-			mTextViewVShader.Text = Intent.GetStringExtra ("vShader");
+			var types = new string[]{"vec2", "vec3", "vec4", "mat3", 
+									        "mat4", "float", "int" };
+
+			var spanInfosTypes = 
+				Tools.SpanInfos (types, 
+								 Intent.GetStringExtra ("vShader"), 
+								 Color.Brown);
+
+			foreach (var item in spanInfosTypes) {
+
+				span.SetSpan (new ForegroundColorSpan (item.SpanColor),
+							  item.SpanStart, 
+							  item.SpanEnd, 
+							  0);
+			}
+
+			var typesInit = new string[]{"uniform", "varying", "attribute"};
+
+			var spanTypesInit = 
+				Tools.SpanInfos (typesInit, 
+					Intent.GetStringExtra ("vShader"), 
+					Color.CadetBlue);
+
+			foreach (var item in spanTypesInit) {
+
+				span.SetSpan (new ForegroundColorSpan (item.SpanColor),
+					item.SpanStart, 
+					item.SpanEnd, 
+					0);
+			}
+
+			var operators = new string[]{"*", "+", "-", "/", 
+										 "=", "(", ")", ",", "{", "}"};
+
+			var spanOperators = 
+				Tools.SpanInfos (operators, 
+					Intent.GetStringExtra ("vShader"), 
+					Color.Yellow);
+
+			foreach (var item in spanOperators) {
+
+				span.SetSpan (new ForegroundColorSpan (item.SpanColor),
+					item.SpanStart, 
+					item.SpanEnd, 
+					0);
+			}
+
+
+			#endregion
+
+
+			mTextViewVShader.SetText(span, TextView.BufferType.Spannable);
 			mTextViewFShader.Text = Intent.GetStringExtra ("fShader");
 
 			mButton = FindViewById<Button> (Resource.Id.button1);

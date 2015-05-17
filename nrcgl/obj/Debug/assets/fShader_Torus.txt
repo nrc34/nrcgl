@@ -30,6 +30,5 @@ void main()
     if(lambert > 0.0f)
         phong = pow(max(dot(nE, nR), 0.0f), material_shininess);
 
-    //fragColor = vec4(1.0, 1.0, 1.0, 1.0);
     gl_FragColor = vec4(vec3(1.0, 1.0, 0.3) * (lambert + phong), 1.0);
 }
