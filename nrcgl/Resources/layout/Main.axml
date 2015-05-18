@@ -10,7 +10,7 @@
         android:minHeight="25dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="30"
+        android:layout_weight="27"
         android:id="@+id/scrollView1">
         <TableLayout
             android:minWidth="25px"
@@ -80,6 +80,35 @@
                     android:scrollHorizontally="false" />
             </TableRow>
             <TableRow
+                android:id="@+id/tableRow8">
+                <RadioGroup
+                    android:minWidth="25px"
+                    android:minHeight="25px"
+                    android:id="@+id/radioGroup1"
+                    android:layout_marginBottom="0.0dp"
+                    android:layout_height="100.1dp">
+                    <RadioButton
+                        android:checked="true"
+                        android:id="@+id/radioButtonTriangle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="0.0dp"
+                        android:text="Triangle" />
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Line"
+                        android:id="@+id/radioButtonLine"
+                        android:layout_marginRight="0.0dp" />
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Point"
+                        android:id="@+id/radioButtonPoint"
+                        android:layout_marginRight="0.0dp" />
+                </RadioGroup>
+            </TableRow>
+            <TableRow
                 android:id="@+id/tableRow6">
                 <TextView
                     android:id="@+id/textViewInfoVShader"
@@ -106,5 +135,5 @@
         android:layout_width="fill_parent"
         android:layout_height="dp"
         android:layout_marginBottom="0dp"
-        android:layout_weight="70" />
+        android:layout_weight="73" />
 </LinearLayout>

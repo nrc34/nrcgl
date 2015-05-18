@@ -52,6 +52,8 @@ namespace nrcgl
 		int pointer2ID;
 		float scale = 1f;
 
+		BeginMode beginMode;
+
 
 
 		public GLView (Context context, IAttributeSet attrs) :
@@ -164,12 +166,24 @@ namespace nrcgl
 				return;
 			}
 
+			beginMode = new BeginMode();
+
+			if (mainActivity.mRadioBTriangle.Checked)
+				beginMode = BeginMode.Triangles;
+
+			if (mainActivity.mRadioBLine.Checked)
+				beginMode = BeginMode.Lines;
+
+			if (mainActivity.mRadioBPoint.Checked)
+				beginMode = BeginMode.Points;
+
+
 			// initialize buffer
 			VertexBuffer = 
 				new VertexFloatBuffer(
 					VertexFormat.XYZ_NORMAL_COLOR, 
 					7650, 
-					BeginMode.Triangles);
+					beginMode);
 
 			DrawBufer(VertexBuffer, VertexFormat.XYZ_NORMAL_COLOR);
 
@@ -336,7 +350,7 @@ namespace nrcgl
 
 				return;
 			}
-				
+
 
 			GL.ClearColor (0.0f, 0.0f, 0.0f, 1f);
 			GL.Clear(ClearBufferMask.ColorBufferBit |
@@ -344,6 +358,17 @@ namespace nrcgl
 
 
 			GL.UseProgram (shader.Program);
+
+			if (mainActivity.mRadioBTriangle.Checked)
+				beginMode = BeginMode.Triangles;
+
+			if (mainActivity.mRadioBLine.Checked)
+				beginMode = BeginMode.Lines;
+
+			if (mainActivity.mRadioBPoint.Checked)
+				beginMode = BeginMode.Points;
+
+			VertexBuffer.DrawMode = beginMode;
 
 			VertexBuffer.Bind(shader);
 

@@ -63,23 +63,35 @@ namespace nrcgl
 		public partial class Id
 		{
 			
+			// aapt resource value: 0x7f06001a
+			public const int button1 = 2131099674;
+			
+			// aapt resource value: 0x7f060019
+			public const int editTextFShader = 2131099673;
+			
+			// aapt resource value: 0x7f060018
+			public const int editTextVShader = 2131099672;
+			
 			// aapt resource value: 0x7f060015
-			public const int button1 = 2131099669;
+			public const int glview = 2131099669;
 			
-			// aapt resource value: 0x7f060014
-			public const int editTextFShader = 2131099668;
+			// aapt resource value: 0x7f060017
+			public const int horizontalScrollView1 = 2131099671;
 			
-			// aapt resource value: 0x7f060013
-			public const int editTextVShader = 2131099667;
+			// aapt resource value: 0x7f060016
+			public const int linearLayout = 2131099670;
+			
+			// aapt resource value: 0x7f06000f
+			public const int radioButtonLine = 2131099663;
 			
 			// aapt resource value: 0x7f060010
-			public const int glview = 2131099664;
+			public const int radioButtonPoint = 2131099664;
 			
-			// aapt resource value: 0x7f060012
-			public const int horizontalScrollView1 = 2131099666;
+			// aapt resource value: 0x7f06000e
+			public const int radioButtonTriangle = 2131099662;
 			
-			// aapt resource value: 0x7f060011
-			public const int linearLayout = 2131099665;
+			// aapt resource value: 0x7f06000d
+			public const int radioGroup1 = 2131099661;
 			
 			// aapt resource value: 0x7f060000
 			public const int scrollView1 = 2131099648;
@@ -114,20 +126,23 @@ namespace nrcgl
 			// aapt resource value: 0x7f060004
 			public const int tableRow5 = 2131099652;
 			
-			// aapt resource value: 0x7f06000c
-			public const int tableRow6 = 2131099660;
+			// aapt resource value: 0x7f060011
+			public const int tableRow6 = 2131099665;
 			
-			// aapt resource value: 0x7f06000e
-			public const int tableRow7 = 2131099662;
+			// aapt resource value: 0x7f060013
+			public const int tableRow7 = 2131099667;
+			
+			// aapt resource value: 0x7f06000c
+			public const int tableRow8 = 2131099660;
 			
 			// aapt resource value: 0x7f06000b
 			public const int textView1 = 2131099659;
 			
-			// aapt resource value: 0x7f06000f
-			public const int textViewInfoFShader = 2131099663;
+			// aapt resource value: 0x7f060014
+			public const int textViewInfoFShader = 2131099668;
 			
-			// aapt resource value: 0x7f06000d
-			public const int textViewInfoVShader = 2131099661;
+			// aapt resource value: 0x7f060012
+			public const int textViewInfoVShader = 2131099666;
 			
 			static Id()
 			{

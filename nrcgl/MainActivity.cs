@@ -39,6 +39,10 @@ namespace nrcgl
 		public SeekBar mSeekBar3;
 		public SeekBar mSeekBar4;
 
+		public RadioButton mRadioBTriangle;
+		public RadioButton mRadioBLine;
+		public RadioButton mRadioBPoint;
+
 		protected override void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
@@ -61,6 +65,10 @@ namespace nrcgl
 			mSeekBar2 = FindViewById<SeekBar> (Resource.Id.seekBar2);
 			mSeekBar3 = FindViewById<SeekBar> (Resource.Id.seekBar3);
 			mSeekBar4 = FindViewById<SeekBar> (Resource.Id.seekBar4);
+
+			mRadioBTriangle = FindViewById<RadioButton> (Resource.Id.radioButtonTriangle);
+			mRadioBLine = FindViewById<RadioButton> (Resource.Id.radioButtonLine);
+			mRadioBPoint = FindViewById<RadioButton> (Resource.Id.radioButtonPoint);
 
 			// Load the view
 			var glView = FindViewById<GLView> (Resource.Id.glview);
