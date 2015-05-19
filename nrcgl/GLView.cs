@@ -14,6 +14,7 @@ using nrcgl.nrcgl;
 using Android.Widget;
 using System.IO;
 using System.Threading;
+using OpenTK.Graphics;
 
 namespace nrcgl
 {
@@ -80,6 +81,9 @@ namespace nrcgl
 		{
 			ContextRenderingApi = OpenTK.Graphics.GLVersion.ES2;
 
+			// Set the graphics mode to use 32bpp colour format, 24bpp depth, 8bpp stencil and 4x MSAA
+			//GraphicsMode = new GraphicsMode(new ColorFormat(32), 24, 8, 4); 
+			GraphicsMode = new AndroidGraphicsMode (new ColorFormat(32), 24, 8, 4, 2, false);
 			// the default GraphicsMode that is set consists of (16, 16, 0, 0, 2, false)
 			try {
 				Log.Verbose ("GLTriangle", "Loading with default settings");
@@ -197,6 +201,10 @@ namespace nrcgl
 			viewportWidth = Width;
 
 			GL.Enable(EnableCap.DepthTest);
+
+			GL.Enable (EnableCap.Blend);
+
+			GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
 			GL.Viewport(0, 0, viewportWidth, viewportHeight);
 

@@ -1,15 +1,16 @@
 ﻿<Properties StartupItem="nrcgl\nrcgl.csproj" GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.02939e3c" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="nrcgl\ShaderEditor.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="nrcgl\GLView.cs">
     <Files>
-      <File FileName="nrcgl\GLView.cs" Line="324" Column="59" />
-      <File FileName="nrcgl\MainActivity.cs" Line="83" Column="46" />
-      <File FileName="nrcgl\nrcgl\Tools.cs" Line="32" Column="84" />
+      <File FileName="nrcgl\GLView.cs" Line="199" Column="20" />
+      <File FileName="nrcgl\MainActivity.cs" Line="83" Column="20" />
+      <File FileName="nrcgl\nrcgl\Tools.cs" Line="1" Column="1" />
       <File FileName="nrcgl\ShaderEditor.cs" Line="27" Column="51" />
-      <File FileName="nrcgl\Assets\fShader_Torus.txt" Line="33" Column="1" />
-      <File FileName="nrcgl\nrcgl\Shader.cs" Line="100" Column="14" />
-      <File FileName="nrcgl\nrcgl\SpanInfo.cs" Line="18" Column="14" />
-      <File FileName="nrcgl\Assets\vShader_Torus.txt" Line="13" Column="1" />
+      <File FileName="nrcgl\Assets\fShader_Torus.txt" Line="1" Column="1" />
+      <File FileName="nrcgl\nrcgl\Shader.cs" Line="68" Column="42" />
+      <File FileName="nrcgl\nrcgl\SpanInfo.cs" Line="1" Column="1" />
+      <File FileName="nrcgl\Assets\vShader_Torus.txt" Line="1" Column="1" />
+      <File FileName="nrcgl\nrcgl\VertexFloatBuffer.cs" Line="316" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

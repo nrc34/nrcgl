@@ -313,8 +313,7 @@ namespace nrcgl.nrcgl
                     break;
             }
 
-
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, id_ebo);
+			GL.BindBuffer(BufferTarget.ElementArrayBuffer, id_ebo);
 			GL.DrawElements(DrawMode, index_position, DrawElementsType.UnsignedShort, IntPtr.Zero);
 
             GL.DisableVertexAttribArray(0);
