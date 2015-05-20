@@ -204,7 +204,8 @@ namespace nrcgl
 
 			GL.Enable (EnableCap.Blend);
 
-			GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+			GL.BlendFunc(BlendingFactorSrc.SrcAlpha, 
+						 BlendingFactorDest.OneMinusSrcAlpha);
 
 			GL.Viewport(0, 0, viewportWidth, viewportHeight);
 

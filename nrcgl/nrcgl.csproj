@@ -59,6 +59,8 @@
     <Compile Include="nrcgl\Camera.cs" />
     <Compile Include="ShaderEditor.cs" />
     <Compile Include="nrcgl\SpanInfo.cs" />
+    <Compile Include="nrcgl\IWGameable.cs" />
+    <Compile Include="nrcgl\shapes\Shape3D.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -79,6 +81,7 @@
   <ItemGroup>
     <Folder Include="Assets\Models\" />
     <Folder Include="nrcgl\" />
+    <Folder Include="nrcgl\shapes\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\Models\Torus.xml" />
