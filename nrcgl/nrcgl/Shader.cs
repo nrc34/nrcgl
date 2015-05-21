@@ -33,7 +33,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace nrcgl.nrcgl
+namespace nrcgl
 {
     
     class Shader
@@ -51,7 +51,19 @@ namespace nrcgl.nrcgl
         public int TexCoordLocation { get; set; }
         public int ColorLocation { get; set; }
 
+		public int MVMatrixHandle { get; set; }
+		public int MMatrixHandle { get; set; }
+		public int MVPMatrixHandle { get; set; }
+		public int PMatrixHandle { get; set; }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="nrcgl.nrcgl.Shader"/> class.
+		/// </summary>
+		/// <param name="vs">Vs.</param>
+		/// <param name="fs">Fs.</param>
+		/// <param name="success">Success.</param>
+		/// <param name="infovShader">Infov shader.</param>
+		/// <param name="infoFShader">Info F shader.</param>
 		public Shader(ref string vs, 
 					  ref string fs, 
 					  out bool success, 
@@ -127,6 +139,11 @@ namespace nrcgl.nrcgl
                 GL.BindAttribLocation(Program, TexCoordLocation, "vertex_texcoord");
             if (ColorLocation >= 0)
                 GL.BindAttribLocation(Program, ColorLocation, "vertex_color");
+
+			MVMatrixHandle = GL.GetUniformLocation(Shader.Program, "modelview_matrix");
+			PMatrixHandle = GL.GetUniformLocation(Shader.Program, "projection_matrix");
+			MMatrixHandle = GL.GetUniformLocation(Shader.Program, "model_matrix");
+			MVPMatrixHandle = GL.GetUniformLocation(Shader.Program, "mvp_matrix");
 
             GL.UseProgram(0);
 

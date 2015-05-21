@@ -33,7 +33,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenTK_NRCGL.NRCGL
+namespace nrcgl
 {
     class Camera
     {
