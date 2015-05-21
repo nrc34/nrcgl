@@ -62,6 +62,10 @@
     <Compile Include="nrcgl\IWGameable.cs" />
     <Compile Include="nrcgl\shapes\Shape3D.cs" />
     <Compile Include="nrcgl\shapes\Torus.cs" />
+    <Compile Include="nrcgl\Tween.cs" />
+    <Compile Include="nrcgl\shapes\Action.cs" />
+    <Compile Include="nrcgl\LifeTime.cs" />
+    <Compile Include="nrcgl\shapes\ShapeManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

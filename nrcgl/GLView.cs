@@ -15,6 +15,8 @@ using Android.Widget;
 using System.IO;
 using System.Threading;
 using OpenTK.Graphics;
+using nrcgl.nrcgl.shapes;
+using System.Collections.Generic;
 
 namespace nrcgl
 {
@@ -23,6 +25,8 @@ namespace nrcgl
 		public MainActivity mainActivity;
 
 		bool move2ShaderEditor = false;
+
+		Int32 updateCounter;
 
 		int viewportWidth, viewportHeight;
 		int mMVPMatrixHandle;
@@ -55,7 +59,8 @@ namespace nrcgl
 
 		BeginMode beginMode;
 
-		Shape3D Shape;
+		Dictionary<string, Shape3D> Shapes3D;
+		Stack<Shape3D> Shapes2Remove;
 		Camera Camera;
 
 
@@ -74,6 +79,7 @@ namespace nrcgl
 
 		void Init ()
 		{
+			updateCounter = 0;
 			Run (60);
 		}
 
@@ -129,8 +135,47 @@ namespace nrcgl
 			// if you've registered delegates for OnLoad
 			base.OnLoad (e);
 
-			Shape = new Torus (this);
+			var Shape = new Torus ("shape1", this);
+			Shape.LifeTime.Max = 1000;
+			Shape.ShapeActions = new Queue<ShapeAction>();
+			Shape.ShapeActions.Enqueue(new ShapeAction(
+				new Action<Shape3D, LifeTime>(
+					(shape, lifeTime) => {
+						shape.Rotate(Vector3.UnitY,0.01f);
 
+						shape.Scale = 
+							new Vector3(1 - Tween.Solve(
+									Tween.Function.Cubic,
+									Tween.Ease.Out,
+									0f,
+									1f,
+									lifeTime.Max,
+									lifeTime.Counter));
+
+					}),
+				new LifeTime(500)));
+			Shape.ShapeActions.Enqueue(new ShapeAction(
+				new Action<Shape3D, LifeTime>(
+					(shape, lifeTime) => {
+						shape.Rotate(Vector3.UnitY,0.01f);
+
+						shape.Scale = 
+							new Vector3(Tween.Solve(
+								Tween.Function.Cubic,
+								Tween.Ease.Out,
+								0f,
+								1f,
+								lifeTime.Max,
+								lifeTime.Counter));
+
+					}),
+				new LifeTime(500)));
+			
+			Shapes3D = new Dictionary<string, Shape3D> ();
+
+			Shapes3D.Add (Shape.Name, Shape);
+
+			Shapes2Remove = new Stack<Shape3D>();
 
 			vid = Tools.DeserializeModel(MainActivity.input);
 
@@ -392,7 +437,9 @@ namespace nrcgl
 
 			GL.UseProgram (0);
 
-			Shape.Render ();
+			foreach (var shape in Shapes3D) {
+				shape.Value.Render ();
+			}
 
 			SwapBuffers();
 		}
@@ -451,9 +498,19 @@ namespace nrcgl
 
 			GL.UseProgram (0);
 
-			Shape.Rotate (Vector3.UnitY, 0.05f);
+			while (Shapes2Remove.Count > 0)
+				Shapes3D.Remove(Shapes2Remove.Pop().Name);
 
-			Shape.Update (Camera, mProjectionMatrix);
+			foreach (var shape in Shapes3D) {
+				
+				ShapeManager.Manage(shape.Value, 
+					Shapes3D, 
+					Shapes2Remove);
+
+				shape.Value.Update (Camera, mProjectionMatrix);
+			}
+
+			updateCounter++;
 		}
 
 

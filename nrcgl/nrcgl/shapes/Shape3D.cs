@@ -4,12 +4,18 @@ using OpenTK.Graphics.ES20;
 using nrcgl.nrcgl;
 using System.IO;
 using OpenTK.Platform.Android;
+using System.Collections.Generic;
 
-namespace nrcgl
+namespace nrcgl.nrcgl.shapes
 {
 	public class Shape3D : IWGameable
 	{
 		public GLView GLView {
+			get;
+			set;
+		}
+
+		public string Name {
 			get;
 			set;
 		}
@@ -59,15 +65,29 @@ namespace nrcgl
 			set;
 		}
 
+		public Queue<ShapeAction> ShapeActions {
+			get; 
+			set; 
+		}
 
-		public Shape3D (GLView gLView)
+		public LifeTime LifeTime {
+			get;
+			set;
+		}
+
+
+
+		public Shape3D (string name,GLView gLView)
 		{
 			GLView = gLView;
+			Name = name;
 			BeginMode = BeginMode.Triangles;
 			VertexFormat = VertexFormat.XYZ_NORMAL_COLOR;
 			Position = Vector3.Zero;
 			Scale = Vector3.One;
 			Quaternion = Quaternion.Identity;
+			// lifetime with max = 0 (shape is imortal) 
+			LifeTime = new LifeTime(0);
 			IsVisible = true;
 		}
 
