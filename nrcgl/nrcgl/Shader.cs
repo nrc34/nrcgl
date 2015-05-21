@@ -36,7 +36,7 @@ using System.Threading.Tasks;
 namespace nrcgl
 {
     
-    class Shader
+    public class Shader
     {
         public string VertexSource { get; private set; }
         public string FragmentSource { get; private set; }
@@ -140,10 +140,10 @@ namespace nrcgl
             if (ColorLocation >= 0)
                 GL.BindAttribLocation(Program, ColorLocation, "vertex_color");
 
-			MVMatrixHandle = GL.GetUniformLocation(Shader.Program, "modelview_matrix");
-			PMatrixHandle = GL.GetUniformLocation(Shader.Program, "projection_matrix");
-			MMatrixHandle = GL.GetUniformLocation(Shader.Program, "model_matrix");
-			MVPMatrixHandle = GL.GetUniformLocation(Shader.Program, "mvp_matrix");
+			MVMatrixHandle = GL.GetUniformLocation(Program, "modelview_matrix");
+			PMatrixHandle = GL.GetUniformLocation(Program, "projection_matrix");
+			MMatrixHandle = GL.GetUniformLocation(Program, "model_matrix");
+			MVPMatrixHandle = GL.GetUniformLocation(Program, "mvp_matrix");
 
             GL.UseProgram(0);
 

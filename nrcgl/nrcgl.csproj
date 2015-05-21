@@ -61,6 +61,7 @@
     <Compile Include="nrcgl\SpanInfo.cs" />
     <Compile Include="nrcgl\IWGameable.cs" />
     <Compile Include="nrcgl\shapes\Shape3D.cs" />
+    <Compile Include="nrcgl\shapes\Torus.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

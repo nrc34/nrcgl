@@ -18,9 +18,9 @@ using OpenTK.Graphics;
 
 namespace nrcgl
 {
-	class GLView : AndroidGameView
+	public class GLView : AndroidGameView
 	{
-		MainActivity mainActivity;
+		public MainActivity mainActivity;
 
 		bool move2ShaderEditor = false;
 
@@ -54,6 +54,9 @@ namespace nrcgl
 		float scale = 1f;
 
 		BeginMode beginMode;
+
+		Shape3D Shape;
+		Camera Camera;
 
 
 
@@ -125,6 +128,9 @@ namespace nrcgl
 			// This is completely optional and only needed
 			// if you've registered delegates for OnLoad
 			base.OnLoad (e);
+
+			Shape = new Torus (this);
+
 
 			vid = Tools.DeserializeModel(MainActivity.input);
 
@@ -222,6 +228,9 @@ namespace nrcgl
 
 			// Set the camera position (View matrix)
 			mViewMatrix = Matrix4.LookAt(0, 3, -5, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+
+			Camera = new Camera ();
+			Camera.View = mViewMatrix;
 
 			// Calculate the projection and view transformation
 			mModelViewProjectionMatrix = Matrix4.Mult(mProjectionMatrix, mViewMatrix);
@@ -383,6 +392,8 @@ namespace nrcgl
 
 			GL.UseProgram (0);
 
+			Shape.Render ();
+
 			SwapBuffers();
 		}
 
@@ -439,6 +450,10 @@ namespace nrcgl
 			VertexBuffer.Bind(shader);
 
 			GL.UseProgram (0);
+
+			Shape.Rotate (Vector3.UnitY, 0.05f);
+
+			Shape.Update (Camera, mProjectionMatrix);
 		}
 
 

@@ -35,7 +35,7 @@ using System.Threading.Tasks;
 
 namespace nrcgl
 {
-    class Camera
+    public class Camera
     {
         private Vector3 position;
         private Quaternion quaternion;

@@ -3,11 +3,17 @@ using OpenTK;
 using OpenTK.Graphics.ES20;
 using nrcgl.nrcgl;
 using System.IO;
+using OpenTK.Platform.Android;
 
 namespace nrcgl
 {
 	public class Shape3D : IWGameable
 	{
+		public GLView GLView {
+			get;
+			set;
+		}
+
 		public Vector3 Position {
 			get;
 			set;
@@ -33,7 +39,12 @@ namespace nrcgl
 			set;
 		}
 
-		public VertexFloatBuffer VertexBuffer {
+		public BeginMode BeginMode {
+			get;
+			set;
+		}
+
+		public static VertexFloatBuffer VertexBuffer {
 			get;
 			set;
 		}
@@ -43,14 +54,17 @@ namespace nrcgl
 			set;
 		}
 
-		public VertexFormat VertexFormat {
+		public static VertexFormat VertexFormat {
 			get;
 			set;
 		}
 
 
-		public Shape3D ()
+		public Shape3D (GLView gLView)
 		{
+			GLView = gLView;
+			BeginMode = BeginMode.Triangles;
+			VertexFormat = VertexFormat.XYZ_NORMAL_COLOR;
 			Position = Vector3.Zero;
 			Scale = Vector3.One;
 			Quaternion = Quaternion.Identity;
@@ -65,16 +79,55 @@ namespace nrcgl
 		}
 
 
-
-
 		#region IWGameable implementation
 
-		public void Load (Stream stream)
+		public void Load (string modelName, string vShaderName, string fShaderName)
 		{
-			if (VertexsIndicesData is VertexsIndicesData)
-				return;
+			if (!(VertexsIndicesData is VertexsIndicesData)) {
+			
+				var model = GLView.mainActivity.Assets.Open (modelName);
 
-			VertexsIndicesData = Tools.DeserializeModel(stream);
+				VertexsIndicesData = Tools.DeserializeModel (model);
+			}
+
+			// initialize shader
+			bool success;
+			string infoVShader;
+			string infoFShader;
+
+			// Vertex and fragment shaders
+			var vShaderStream = GLView.mainActivity.Assets.Open (vShaderName);
+			var fShaderStream = GLView.mainActivity.Assets.Open (fShaderName);
+
+			StreamReader vsReader = new StreamReader(vShaderStream);
+			string vertexShaderSrc = vsReader.ReadToEnd ();
+
+			StreamReader fsReader = new StreamReader(fShaderStream);
+			string fragmentShaderSrc = fsReader.ReadToEnd ();
+
+			Shader = 
+				new Shader(
+					ref vertexShaderSrc, 
+					ref fragmentShaderSrc,
+					out success,
+					out infoVShader,
+					out infoFShader);
+
+
+			// initialize buffer
+			VertexBuffer = 
+				new VertexFloatBuffer(
+					VertexFormat, 
+					7650, 
+					BeginMode);
+			
+			DrawBufer ();
+
+			VertexBuffer.IndexFromLength();
+			VertexBuffer.Load();
+
+			VertexBuffer.Bind(Shader);
+
 		}
 
 		public virtual void Update (Camera camera, Matrix4 ProjectionMatrix)
@@ -96,13 +149,9 @@ namespace nrcgl
 
 			GL.UniformMatrix4 (Shader.MVMatrixHandle, false, ref ModelViewMatrix);
 			GL.UniformMatrix4 (Shader.MMatrixHandle, false, ref ModelMatrix);
-
 			GL.UniformMatrix4 (Shader.MVPMatrixHandle, false, ref ModelViewProjectionMatrix);
 
-			VertexBuffer.Bind(Shader);
-
 			GL.UseProgram (0);
-
 		}
 
 		public virtual void Render ()
@@ -110,6 +159,8 @@ namespace nrcgl
 			if (!IsVisible) return;
 
 			GL.UseProgram (Shader.Program);
+
+			VertexBuffer.DrawMode = BeginMode;
 
 			VertexBuffer.Bind(Shader);
 		}

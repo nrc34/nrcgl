@@ -58,7 +58,7 @@ namespace nrcgl.nrcgl
         XYZW
     }
 
-    internal class VertexFloatBuffer
+    public class VertexFloatBuffer
     {
         public VertexFormat Format { get; private set; }
         public int Stride { get; private set; }
