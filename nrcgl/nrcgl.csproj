@@ -90,6 +90,7 @@
     <Folder Include="nrcgl\" />
     <Folder Include="nrcgl\shapes\" />
     <Folder Include="Resources\drawable-nodpi\" />
+    <Folder Include="Game\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\Models\Torus.xml" />

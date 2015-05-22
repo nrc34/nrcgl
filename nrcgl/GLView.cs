@@ -29,10 +29,6 @@ namespace nrcgl
 		Int32 updateCounter;
 
 		int viewportWidth, viewportHeight;
-		int mMVPMatrixHandle;
-		int mMVMatrixHandle;
-		int mPMatrixHandle;
-		int mMMatrixHandle;
 		int mSeekBarsHandle;
 
 		float xTouch;
@@ -40,13 +36,9 @@ namespace nrcgl
 
 		Matrix4 mProjectionMatrix;
 		Matrix4 mViewMatrix;
-		Matrix4 mModelViewProjectionMatrix;
 
 		Shader shader;
 		bool IsShaderOK;
-
-		VertexFloatBuffer VertexBuffer;
-		VertexsIndicesData vid;
 
 		float rotateY = 0f;
 		float rotateX = 0f;
@@ -184,10 +176,12 @@ namespace nrcgl
 
 			Shapes3D.Add (Shape.Name, Shape);
 
+			var MainShape = new Torus ("main_shape", this);
+			MainShape.TextureId = textureId;
+
+			Shapes3D.Add (MainShape.Name, MainShape);
+
 			Shapes2Remove = new Stack<Shape3D>();
-
-
-			vid = Tools.DeserializeModel(MainActivity.input);
 
 			// Vertex and fragment shaders
 			StreamReader vsReader = new StreamReader(MainActivity.vShader);
@@ -220,6 +214,8 @@ namespace nrcgl
 					out infoVShader,
 					out infoFShader);
 			
+			Shapes3D ["main_shape"].Shader = shader;
+			
 			IsShaderOK = success;
 
 			if (!IsShaderOK) {
@@ -240,20 +236,7 @@ namespace nrcgl
 			if (mainActivity.mRadioBPoint.Checked)
 				beginMode = BeginMode.Points;
 
-
-			// initialize buffer
-			VertexBuffer = 
-				new VertexFloatBuffer(
-					VertexFormat.XYZ_NORMAL_COLOR, 
-					7650, 
-					beginMode);
-
-			DrawBufer(VertexBuffer, VertexFormat.XYZ_NORMAL_COLOR);
-
-			VertexBuffer.IndexFromLength();
-			VertexBuffer.Load();
-
-			VertexBuffer.Bind(shader);
+			Shapes3D ["main_shape"].BeginMode = beginMode;
 
 			// Initialize GL
 			viewportHeight = Height; 
@@ -285,24 +268,9 @@ namespace nrcgl
 			Camera = new Camera ();
 			Camera.View = mViewMatrix;
 
-			// Calculate the projection and view transformation
-			mModelViewProjectionMatrix = Matrix4.Mult(mProjectionMatrix, mViewMatrix);
-
-			var mModelMatrix = Matrix4.Scale (1);
-			var mModelViewMatrix = Matrix4.Mult(mModelMatrix, mViewMatrix);
-
 			GL.UseProgram (shader.Program);
 
-			mMVMatrixHandle = GL.GetUniformLocation(shader.Program, "modelview_matrix");
-			mPMatrixHandle = GL.GetUniformLocation(shader.Program, "projection_matrix");
-			mMMatrixHandle = GL.GetUniformLocation(shader.Program, "model_matrix");
-			mMVPMatrixHandle = GL.GetUniformLocation(shader.Program, "mvp_matrix");
 			mSeekBarsHandle = GL.GetUniformLocation(shader.Program, "sb");
-
-			GL.UniformMatrix4 (mMVMatrixHandle, false, ref mModelViewMatrix);
-			GL.UniformMatrix4 (mPMatrixHandle, false, ref mProjectionMatrix);
-			GL.UniformMatrix4 (mMMatrixHandle, false, ref mModelMatrix);
-			GL.UniformMatrix4 (mMVPMatrixHandle, false, ref mModelViewProjectionMatrix);
 
 			GL.UseProgram (0);
 
@@ -334,72 +302,6 @@ namespace nrcgl
 		}
 
 
-		public virtual void DrawBufer(VertexFloatBuffer buffer, 
-									  VertexFormat vertexFormat)
-		{
-			switch (vertexFormat)
-			{
-			case VertexFormat.XY:
-				break;
-			case VertexFormat.XY_COLOR:
-				break;
-			case VertexFormat.XY_UV:
-				break;
-			case VertexFormat.XY_UV_COLOR:
-				break;
-			case VertexFormat.XYZ:
-				break;
-			case VertexFormat.XYZ_COLOR:
-				break;
-			case VertexFormat.XYZ_UV:
-				break;
-			case VertexFormat.XYZ_UV_COLOR:
-				break;
-			case VertexFormat.XYZ_NORMAL_COLOR:
-				#region xyz_normal_color
-				foreach (Vertex vertex in vid.Vertexs)
-				{
-					buffer.AddVertex(vertex.Position.X, vertex.Position.Y, vertex.Position.Z,
-						vertex.Normal.X, vertex.Normal.Y, vertex.Normal.Z,
-						vertex.Color.R, vertex.Color.G, vertex.Color.B, vertex.Color.A);
-				}
-				#endregion
-				break;
-			case VertexFormat.XYZ_NORMAL_UV:
-				#region xyz_normal_uv
-				foreach (Vertex vertex in vid.Vertexs)
-				{
-					buffer.AddVertex(vertex.Position.X, vertex.Position.Y, vertex.Position.Z,
-						vertex.Normal.X, vertex.Normal.Y, vertex.Normal.Z,
-						vertex.TexCoord.X, vertex.TexCoord.Y);
-				}
-				#endregion
-				break;
-			case VertexFormat.XYZ_NORMAL:
-				#region xyz_normal
-				foreach (Vertex vertex in vid.Vertexs)
-				{
-					buffer.AddVertex(vertex.Position.X, vertex.Position.Y, vertex.Position.Z,
-						new Vector3(vertex.Normal.X, vertex.Normal.Y, vertex.Normal.Z));
-				}
-				#endregion
-				break;
-			case VertexFormat.XYZ_NORMAL_UV_COLOR:
-				#region xyz_normal_uv_color
-				foreach (Vertex vertex in vid.Vertexs)
-				{
-					buffer.AddVertex(vertex.Position.X, vertex.Position.Y, vertex.Position.Z,
-						vertex.Normal.X, vertex.Normal.Y, vertex.Normal.Z,
-						vertex.TexCoord.X, vertex.TexCoord.Y,
-						vertex.Color.R, vertex.Color.G, vertex.Color.B, vertex.Color.A);
-				}
-				#endregion
-				break;
-			default:
-				break;
-			}
-		}
-
 		public void SetActivity(MainActivity mainActivity)
 		{
 			this.mainActivity = mainActivity;
@@ -428,23 +330,6 @@ namespace nrcgl
 				ClearBufferMask.DepthBufferBit);
 
 
-			GL.UseProgram (shader.Program);
-
-			if (mainActivity.mRadioBTriangle.Checked)
-				beginMode = BeginMode.Triangles;
-
-			if (mainActivity.mRadioBLine.Checked)
-				beginMode = BeginMode.Lines;
-
-			if (mainActivity.mRadioBPoint.Checked)
-				beginMode = BeginMode.Points;
-
-			VertexBuffer.DrawMode = beginMode;
-
-			VertexBuffer.Bind(shader);
-
-			GL.UseProgram (0);
-
 			foreach (var shape in Shapes3D) {
 				shape.Value.Render ();
 			}
@@ -472,17 +357,6 @@ namespace nrcgl
 
 			if (!IsShaderOK) return;
 
-			//textView.Text = "ups: "+(1/e.Time).ToString ();
-
-			var mModelMatrix = Matrix4.Scale(scale) *
-				Matrix4.Rotate (Quaternion.FromAxisAngle(Vector3.UnitY, rotateY * 3) * 
-					Quaternion.FromAxisAngle(Vector3.UnitX, rotateX * 3));
-
-			var mModelViewMatrix = Matrix4.Mult(mModelMatrix, mViewMatrix);
-
-			mModelViewProjectionMatrix = 
-				Matrix4.Mult (mModelMatrix,  mViewMatrix) * mProjectionMatrix;
-
 
 			GL.UseProgram (shader.Program);
 
@@ -497,14 +371,12 @@ namespace nrcgl
 			mainActivity.textView.Text += " s3:" + mainActivity.mSeekBar3.Progress.ToString();
 			mainActivity.textView.Text += " s4:" + mainActivity.mSeekBar4.Progress.ToString();
 
-			GL.UniformMatrix4 (mMVMatrixHandle, false, ref mModelViewMatrix);
-			GL.UniformMatrix4 (mMMatrixHandle, false, ref mModelMatrix);
-
-			GL.UniformMatrix4 (mMVPMatrixHandle, false, ref mModelViewProjectionMatrix);
-
-			VertexBuffer.Bind(shader);
-
 			GL.UseProgram (0);
+
+			Shapes3D ["main_shape"].Quaternion = (Quaternion.FromAxisAngle (Vector3.UnitY, rotateY * 3) *
+				Quaternion.FromAxisAngle (Vector3.UnitX, rotateX * 3));
+			
+			Shapes3D ["main_shape"].Scale = new Vector3 (scale);
 
 			while (Shapes2Remove.Count > 0)
 				Shapes3D.Remove(Shapes2Remove.Pop().Name);

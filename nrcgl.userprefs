@@ -2,24 +2,15 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.02939e3c" />
   <MonoDevelop.Ide.Workbench ActiveDocument="nrcgl\GLView.cs">
     <Files>
-      <File FileName="nrcgl\GLView.cs" Line="182" Column="1" />
+      <File FileName="nrcgl\GLView.cs" Line="147" Column="32" />
       <File FileName="nrcgl\MainActivity.cs" Line="51" Column="47" />
       <File FileName="nrcgl\nrcgl\Tools.cs" Line="1" Column="1" />
       <File FileName="nrcgl\ShaderEditor.cs" Line="1" Column="1" />
-      <File FileName="nrcgl\nrcgl\shapes\Shape3D.cs" Line="101" Column="1" />
-      <File FileName="..\..\Visual Studio 2013\Projects\OpenTK_NRCGL\OpenTK_NRCGL\NRCGL\Shapes\Shape3D.cs" Line="527" Column="40" />
-      <File FileName="nrcgl\nrcgl\Camera.cs" Line="38" Column="12" />
-      <File FileName="nrcgl\nrcgl\Shader.cs" Line="146" Column="44" />
-      <File FileName="nrcgl\nrcgl\IWGameable.cs" Line="9" Column="36" />
-      <File FileName="nrcgl\nrcgl\VertexFloatBuffer.cs" Line="222" Column="21" />
+      <File FileName="nrcgl\nrcgl\shapes\Shape3D.cs" Line="98" Column="3" />
+      <File FileName="..\..\Visual Studio 2013\Projects\OpenTK_NRCGL\OpenTK_NRCGL\NRCGL\Shapes\Shape3D.cs" Line="928" Column="4" />
       <File FileName="nrcgl\nrcgl\shapes\Torus.cs" Line="6" Column="30" />
-      <File FileName="nrcgl\nrcgl\Tween.cs" Line="7" Column="22" />
-      <File FileName="nrcgl\nrcgl\shapes\Action.cs" Line="13" Column="12" />
-      <File FileName="nrcgl\nrcgl\LifeTime.cs" Line="12" Column="12" />
-      <File FileName="..\..\Visual Studio 2013\Projects\OpenTK_NRCGL\OpenTK_NRCGL\Game\MyGameLevel.cs" Line="785" Column="23" />
-      <File FileName="..\..\Visual Studio 2013\Projects\OpenTK_NRCGL\OpenTK_NRCGL\NRCGL\Level\GameLevel.cs" Line="165" Column="59" />
       <File FileName="nrcgl\nrcgl\shapes\ShapeManager.cs" Line="7" Column="29" />
-      <File FileName="..\..\Visual Studio 2013\Projects\OpenTK_NRCGL\OpenTK_NRCGL\Game\MyGame.cs" Line="362" Column="59" />
+      <File FileName="nrcgl\Assets\fShader_Torus.txt" Line="34" Column="27" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
