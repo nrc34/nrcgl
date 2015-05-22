@@ -45,6 +45,11 @@ namespace nrcgl.nrcgl.shapes
 			set;
 		}
 
+		public int TextureId {
+			get;
+			set;
+		}
+
 		public BeginMode BeginMode {
 			get;
 			set;
@@ -82,7 +87,7 @@ namespace nrcgl.nrcgl.shapes
 			GLView = gLView;
 			Name = name;
 			BeginMode = BeginMode.Triangles;
-			VertexFormat = VertexFormat.XYZ_NORMAL_COLOR;
+			VertexFormat = VertexFormat.XYZ_NORMAL_UV_COLOR;
 			Position = Vector3.Zero;
 			Scale = Vector3.One;
 			Quaternion = Quaternion.Identity;
@@ -179,6 +184,10 @@ namespace nrcgl.nrcgl.shapes
 			if (!IsVisible) return;
 
 			GL.UseProgram (Shader.Program);
+
+			GL.ActiveTexture(TextureUnit.Texture0);
+			GL.BindTexture(TextureTarget.Texture2D, TextureId);
+			GL.Uniform1(GL.GetUniformLocation(Shader.Program, "TextureUnit0"), TextureUnit.Texture0 - TextureUnit.Texture0);
 
 			VertexBuffer.DrawMode = BeginMode;
 

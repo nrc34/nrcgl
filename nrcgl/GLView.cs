@@ -135,7 +135,16 @@ namespace nrcgl
 			// if you've registered delegates for OnLoad
 			base.OnLoad (e);
 
+			GL.Enable (EnableCap.Texture2D);
+
+			int textureId;
+			GL.GenTextures (1, out textureId);
+
+			Texture.LoadTexture (Context, Resource.Drawable.text256x256, textureId);
+
+
 			var Shape = new Torus ("shape1", this);
+			Shape.TextureId = textureId;
 			Shape.LifeTime.Max = 1000;
 			Shape.ShapeActions = new Queue<ShapeAction>();
 			Shape.ShapeActions.Enqueue(new ShapeAction(
@@ -177,9 +186,8 @@ namespace nrcgl
 
 			Shapes2Remove = new Stack<Shape3D>();
 
-			vid = Tools.DeserializeModel(MainActivity.input);
 
-			mainActivity.textView.Text = "Costa" + vid.Vertexs.Count.ToString();
+			vid = Tools.DeserializeModel(MainActivity.input);
 
 			// Vertex and fragment shaders
 			StreamReader vsReader = new StreamReader(MainActivity.vShader);

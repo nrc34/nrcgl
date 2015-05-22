@@ -17,3 +17,4 @@ C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\obj\Debug\R.cs.flag
 C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\obj\Debug\uploadflags.txt
 C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\obj\Debug\nrcgl.csprojResolveAssemblyReference.cache
 C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\obj\Debug\res\layout\shadereditor.xml
+C:\Users\Nuno Costa\Documents\Projects\nrcgl\nrcgl\obj\Debug\res\drawable-nodpi\text256x256.png

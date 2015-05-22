@@ -66,6 +66,7 @@
     <Compile Include="nrcgl\shapes\Action.cs" />
     <Compile Include="nrcgl\LifeTime.cs" />
     <Compile Include="nrcgl\shapes\ShapeManager.cs" />
+    <Compile Include="nrcgl\Texture.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -81,12 +82,14 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\Icon.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\Icon.png" />
     <AndroidResource Include="Resources\layout\ShaderEditor.axml" />
+    <AndroidResource Include="Resources\drawable-nodpi\text256x256.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Assets\Models\" />
     <Folder Include="nrcgl\" />
     <Folder Include="nrcgl\shapes\" />
+    <Folder Include="Resources\drawable-nodpi\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\Models\Torus.xml" />
