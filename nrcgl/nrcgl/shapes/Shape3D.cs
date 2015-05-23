@@ -55,17 +55,17 @@ namespace nrcgl.nrcgl.shapes
 			set;
 		}
 
-		public static VertexFloatBuffer VertexBuffer {
+		public VertexFloatBuffer VertexBuffer {
 			get;
 			set;
 		}
 
-		public static VertexsIndicesData VertexsIndicesData {
+		public VertexsIndicesData VertexsIndicesData {
 			get;
 			set;
 		}
 
-		public static VertexFormat VertexFormat {
+		public VertexFormat VertexFormat {
 			get;
 			set;
 		}
@@ -106,15 +106,9 @@ namespace nrcgl.nrcgl.shapes
 
 		#region IWGameable implementation
 
-		public void Load (string modelName, string vShaderName, string fShaderName)
+		public void Load (string vShaderName, string fShaderName)
 		{
-			if (!(VertexsIndicesData is VertexsIndicesData)) {
 			
-				var model = GLView.mainActivity.Assets.Open (modelName);
-
-				VertexsIndicesData = Tools.DeserializeModel (model);
-			}
-
 			// initialize shader
 			bool success;
 			string infoVShader;

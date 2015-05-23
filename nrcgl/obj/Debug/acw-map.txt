@@ -6,7 +6,3 @@ nrcgl.GLView, nrcgl;md507da01d19045d5f91987f55bbee96c1e.GLView
 nrcgl.GLView, nrcgl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md507da01d19045d5f91987f55bbee96c1e.GLView
 nrcgl.GLView;md507da01d19045d5f91987f55bbee96c1e.GLView
 nrcgl.GLView;md507da01d19045d5f91987f55bbee96c1e.GLView
-nrcgl.ShaderEditor, nrcgl;md507da01d19045d5f91987f55bbee96c1e.ShaderEditor
-nrcgl.ShaderEditor, nrcgl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md507da01d19045d5f91987f55bbee96c1e.ShaderEditor
-nrcgl.ShaderEditor;md507da01d19045d5f91987f55bbee96c1e.ShaderEditor
-nrcgl.ShaderEditor;md507da01d19045d5f91987f55bbee96c1e.ShaderEditor

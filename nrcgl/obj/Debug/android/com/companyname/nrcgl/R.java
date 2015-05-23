@@ -16,12 +16,7 @@ public final class R {
         public static final int text256x256=0x7f020002;
     }
     public static final class id {
-        public static final int button1=0x7f06001a;
-        public static final int editTextFShader=0x7f060019;
-        public static final int editTextVShader=0x7f060018;
         public static final int glview=0x7f060015;
-        public static final int horizontalScrollView1=0x7f060017;
-        public static final int linearLayout=0x7f060016;
         public static final int radioButtonLine=0x7f06000f;
         public static final int radioButtonPoint=0x7f060010;
         public static final int radioButtonTriangle=0x7f06000e;
@@ -46,7 +41,6 @@ public final class R {
     }
     public static final class layout {
         public static final int main=0x7f030000;
-        public static final int shadereditor=0x7f030001;
     }
     public static final class string {
         public static final int app_name=0x7f040000;

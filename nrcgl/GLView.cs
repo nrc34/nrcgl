@@ -24,11 +24,10 @@ namespace nrcgl
 	{
 		public MainActivity mainActivity;
 
-		bool move2ShaderEditor = false;
-
 		Int32 updateCounter;
 
-		int viewportWidth, viewportHeight;
+		int viewportWidth;
+		int viewportHeight;
 		int mSeekBarsHandle;
 
 		float xTouch;
@@ -37,11 +36,10 @@ namespace nrcgl
 		Matrix4 mProjectionMatrix;
 		Matrix4 mViewMatrix;
 
-		Shader shader;
-		bool IsShaderOK;
-
 		float rotateY = 0f;
 		float rotateX = 0f;
+		float moveY = 0f;
+		float moveX = 0f;
 
 		float distTouch;
 		float distTouchZero;
@@ -52,8 +50,11 @@ namespace nrcgl
 		BeginMode beginMode;
 
 		Dictionary<string, Shape3D> Shapes3D;
+		Shape3D CurrShape;
 		Stack<Shape3D> Shapes2Remove;
 		Camera Camera;
+
+		int textureId;
 
 
 
@@ -129,10 +130,15 @@ namespace nrcgl
 
 			GL.Enable (EnableCap.Texture2D);
 
-			int textureId;
 			GL.GenTextures (1, out textureId);
 
 			Texture.LoadTexture (Context, Resource.Drawable.text256x256, textureId);
+
+			int textureId1;
+			GL.GenTextures (1, out textureId1);
+
+			Texture.LoadTexture (Context, Resource.Drawable.text256x256, textureId1);
+
 
 
 			var Shape = new Torus ("shape1", this);
@@ -174,56 +180,26 @@ namespace nrcgl
 			
 			Shapes3D = new Dictionary<string, Shape3D> ();
 
+			Shape.IsVisible = false;
 			Shapes3D.Add (Shape.Name, Shape);
 
 			var MainShape = new Torus ("main_shape", this);
 			MainShape.TextureId = textureId;
+			MainShape.Scale = new Vector3 (0.2f);
+			MainShape.Position = new Vector3 (-1f, 0, -1);
+			MainShape.IsVisible = true;
+			MainShape.ShapeActions = new Queue<ShapeAction>();
+
+			var Sphere1 = new Sphere ("sphere1", this);
+			Sphere1.TextureId = textureId1;
+			Sphere1.IsVisible = false;
 
 			Shapes3D.Add (MainShape.Name, MainShape);
+			Shapes3D.Add (Sphere1.Name, Sphere1);
 
 			Shapes2Remove = new Stack<Shape3D>();
 
-			// Vertex and fragment shaders
-			StreamReader vsReader = new StreamReader(MainActivity.vShader);
-			string vertexShaderSrc = vsReader.ReadToEnd ();
 
-			StreamReader fsReader = new StreamReader(MainActivity.fShader);
-			string fragmentShaderSrc = fsReader.ReadToEnd ();
-
-			// shaders from editor
-			string editorVShader = 
-				mainActivity.Intent.GetStringExtra ("vShader");
-			string editorFShader = 
-				mainActivity.Intent.GetStringExtra ("fShader");
-
-			if (editorVShader != null) {
-				vertexShaderSrc = editorVShader;
-				fragmentShaderSrc = editorFShader;
-			}
-
-			// initialize shader
-			bool success;
-			string infoVShader;
-			string infoFShader;
-
-			shader = 
-				new Shader(
-					ref vertexShaderSrc, 
-					ref fragmentShaderSrc,
-					out success,
-					out infoVShader,
-					out infoFShader);
-			
-			Shapes3D ["main_shape"].Shader = shader;
-			
-			IsShaderOK = success;
-
-			if (!IsShaderOK) {
-				mainActivity.textView.Text ="Error compiling shaders.";
-				mainActivity.mTextViewInfoVShader.Text = infoVShader;
-				mainActivity.mTextViewInfoFShader.Text = infoFShader;
-				return;
-			}
 
 			beginMode = new BeginMode();
 
@@ -237,6 +213,8 @@ namespace nrcgl
 				beginMode = BeginMode.Points;
 
 			Shapes3D ["main_shape"].BeginMode = beginMode;
+
+			CurrShape = Shapes3D ["main_shape"];
 
 			// Initialize GL
 			viewportHeight = Height; 
@@ -263,14 +241,21 @@ namespace nrcgl
 															1000.0f);
 
 			// Set the camera position (View matrix)
-			mViewMatrix = Matrix4.LookAt(0, 3, -5, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+			//mViewMatrix = Matrix4.LookAt(0, 3, -5, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
 
 			Camera = new Camera ();
-			Camera.View = mViewMatrix;
 
-			GL.UseProgram (shader.Program);
 
-			mSeekBarsHandle = GL.GetUniformLocation(shader.Program, "sb");
+			Camera.Rotate (Vector3.UnitX, MathHelper.PiOver2);
+			Camera.Rotate (Vector3.UnitY, MathHelper.Pi);
+			Camera.Position = new Vector3 (0, -5, 0);
+			Camera.Update ();
+
+			//Camera.View = mViewMatrix;
+
+			GL.UseProgram (Shapes3D["main_shape"].Shader.Program);
+
+			mSeekBarsHandle = GL.GetUniformLocation(Shapes3D["main_shape"].Shader.Program, "sb");
 
 			GL.UseProgram (0);
 
@@ -313,16 +298,16 @@ namespace nrcgl
 			
 			base.OnRenderFrame (e);
 
-			if (!IsShaderOK) {
+			if (mainActivity.mRadioBTriangle.Checked)
+				beginMode = BeginMode.Triangles;
 
-				GL.ClearColor (0.2f, 0.0f, 0.0f, 1f);
-				GL.Clear(ClearBufferMask.ColorBufferBit |
-					ClearBufferMask.DepthBufferBit);
-				
-				SwapBuffers ();
+			if (mainActivity.mRadioBLine.Checked)
+				beginMode = BeginMode.Lines;
 
-				return;
-			}
+			if (mainActivity.mRadioBPoint.Checked)
+				beginMode = BeginMode.Points;
+
+			CurrShape.BeginMode = beginMode;
 
 
 			GL.ClearColor (0.0f, 0.0f, 0.0f, 1f);
@@ -342,23 +327,8 @@ namespace nrcgl
 		{
 			base.OnUpdateFrame (e);
 
-			if(move2ShaderEditor){
 
-				move2ShaderEditor = false;
-
-				Intent intent = new Intent(mainActivity, typeof(ShaderEditor));
-
-				intent.PutExtra ("vShader", shader.VertexSource);
-				intent.PutExtra ("fShader", shader.FragmentSource);
-
-				mainActivity.StartActivity (intent);
-				mainActivity.Finish ();
-			}
-
-			if (!IsShaderOK) return;
-
-
-			GL.UseProgram (shader.Program);
+			GL.UseProgram (Shapes3D["main_shape"].Shader.Program);
 
 			GL.Uniform4(mSeekBarsHandle, 
 				new Vector4(mainActivity.mSeekBar1.Progress / 255f,
@@ -373,10 +343,10 @@ namespace nrcgl
 
 			GL.UseProgram (0);
 
-			Shapes3D ["main_shape"].Quaternion = (Quaternion.FromAxisAngle (Vector3.UnitY, rotateY * 3) *
+			CurrShape.Quaternion = (Quaternion.FromAxisAngle (Vector3.UnitY, rotateY * 3) *
 				Quaternion.FromAxisAngle (Vector3.UnitX, rotateX * 3));
 			
-			Shapes3D ["main_shape"].Scale = new Vector3 (scale);
+			CurrShape.Scale = new Vector3 (scale);
 
 			while (Shapes2Remove.Count > 0)
 				Shapes3D.Remove(Shapes2Remove.Pop().Name);
@@ -408,13 +378,94 @@ namespace nrcgl
 				case MotionEventActions.Down:
 					xTouch = e.GetX ();
 					yTouch = e.GetY ();
+					moveX = 0;
 					break;
 
 				case MotionEventActions.Move:
 					rotateY += speed * (e.GetX () - xTouch);
+					moveX += (e.GetX () - xTouch);
 					xTouch = e.GetX ();
 					rotateX -= speed * (e.GetY () - yTouch);
+					moveY -= speed * (e.GetY () - yTouch);
 					yTouch = e.GetY ();
+					break;
+
+				case MotionEventActions.Up:
+					#region shoot
+					if (moveX <= 10 && moveX >= -10) {
+						var bullet = new Sphere (
+							             "bullet" + Guid.NewGuid ().ToString (), 
+							             this);
+						bullet.TextureId = textureId;
+						bullet.Scale = new Vector3 (0.05f);
+						bullet.Position = new Vector3 (Shapes3D ["main_shape"].Position.X,
+							Shapes3D ["main_shape"].Position.Y,
+							Shapes3D ["main_shape"].Position.Z);
+						bullet.LifeTime.Max = 500;
+						bullet.ShapeActions = new Queue<ShapeAction> ();
+						bullet.ShapeActions.Enqueue (new ShapeAction (
+							new Action<Shape3D, LifeTime> (
+								(shape, lifeTime) => {
+
+									shape.Position = 
+										new Vector3 (shape.Position.X,
+										shape.Position.Y,
+										shape.Position.Z +
+										Tween.Solve (
+											Tween.Function.Cubic,
+											Tween.Ease.Out,
+											0f,
+											0.5f,
+											lifeTime.Max,
+											lifeTime.Counter));
+								}),
+							new LifeTime (500)));
+						Shapes3D.Add (bullet.Name, bullet);
+					}
+					#endregion
+					int mf = 20;
+					if (moveX < -10) {
+						Shapes3D ["main_shape"].ShapeActions.
+						Enqueue (new ShapeAction (
+							new Action<Shape3D, LifeTime> (
+								(shape, lifeTime) => {
+
+									shape.Position = 
+										new Vector3 (
+										shape.Position.X +
+										Tween.Solve (
+												Tween.Function.Elastic,
+											Tween.Ease.InOut,
+											0f,
+											0.1f,
+											lifeTime.Max,
+											lifeTime.Counter),
+										shape.Position.Y,
+										shape.Position.Z);
+								}),
+							new LifeTime ((int)-moveX/mf)));
+					} else if (moveX > 10) {
+						Shapes3D ["main_shape"].ShapeActions.
+						Enqueue (new ShapeAction (
+							new Action<Shape3D, LifeTime> (
+								(shape, lifeTime) => {
+
+									shape.Position = 
+										new Vector3 (
+											shape.Position.X  -
+											Tween.Solve (
+												Tween.Function.Cubic,
+												Tween.Ease.Out,
+												0f,
+												0.1f,
+												lifeTime.Max,
+												lifeTime.Counter),
+											shape.Position.Y,
+											shape.Position.Z);
+								}),
+							new LifeTime ((int)moveX/mf)));
+					}
+
 					break;
 
 				default:
@@ -459,12 +510,9 @@ namespace nrcgl
 					break;
 				}
 
-//				mainActivity.textView.Text += ": " + 
-//					distTouchZero.ToString() + 
-//					" : "+ distTouch.ToString ();
 			} else if(e.PointerCount == 3){
 
-				move2ShaderEditor = true;
+				mainActivity.mTextViewInfoFShader.Text = Width.ToString () + ":" + Height.ToString ();
 			}
 
 			return true;

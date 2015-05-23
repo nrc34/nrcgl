@@ -66,23 +66,8 @@ namespace nrcgl
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f06001a
-			public const int button1 = 2131099674;
-			
-			// aapt resource value: 0x7f060019
-			public const int editTextFShader = 2131099673;
-			
-			// aapt resource value: 0x7f060018
-			public const int editTextVShader = 2131099672;
-			
 			// aapt resource value: 0x7f060015
 			public const int glview = 2131099669;
-			
-			// aapt resource value: 0x7f060017
-			public const int horizontalScrollView1 = 2131099671;
-			
-			// aapt resource value: 0x7f060016
-			public const int linearLayout = 2131099670;
 			
 			// aapt resource value: 0x7f06000f
 			public const int radioButtonLine = 2131099663;
@@ -162,9 +147,6 @@ namespace nrcgl
 			
 			// aapt resource value: 0x7f030000
 			public const int Main = 2130903040;
-			
-			// aapt resource value: 0x7f030001
-			public const int ShaderEditor = 2130903041;
 			
 			static Layout()
 			{

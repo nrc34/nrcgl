@@ -57,7 +57,6 @@
     <Compile Include="nrcgl\Shader.cs" />
     <Compile Include="nrcgl\Tools.cs" />
     <Compile Include="nrcgl\Camera.cs" />
-    <Compile Include="ShaderEditor.cs" />
     <Compile Include="nrcgl\SpanInfo.cs" />
     <Compile Include="nrcgl\IWGameable.cs" />
     <Compile Include="nrcgl\shapes\Shape3D.cs" />
@@ -67,6 +66,7 @@
     <Compile Include="nrcgl\LifeTime.cs" />
     <Compile Include="nrcgl\shapes\ShapeManager.cs" />
     <Compile Include="nrcgl\Texture.cs" />
+    <Compile Include="nrcgl\shapes\Sphere.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -81,7 +81,6 @@
     <AndroidResource Include="Resources\drawable-xhdpi\Icon.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\Icon.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\Icon.png" />
-    <AndroidResource Include="Resources\layout\ShaderEditor.axml" />
     <AndroidResource Include="Resources\drawable-nodpi\text256x256.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
@@ -98,5 +97,6 @@
     <AndroidAsset Include="Assets\Torus3D_smooth.xml" />
     <AndroidAsset Include="Assets\fShader_Torus.txt" />
     <AndroidAsset Include="Assets\vShader_Torus.txt" />
+    <AndroidAsset Include="Assets\sphere3D_smooth.xml" />
   </ItemGroup>
 </Project>

@@ -3,7 +3,6 @@
   <uses-sdk android:minSdkVersion="16" />
   <application android:label="nrcgl" android:name="mono.android.app.Application" android:debuggable="true">
     <activity android:configChanges="keyboardHidden|orientation" android:hardwareAccelerated="false" android:icon="@drawable/icon" android:label="nrcgl" android:name="md507da01d19045d5f91987f55bbee96c1e.MainActivity" />
-    <activity android:label="ShaderEditor" android:name="md507da01d19045d5f91987f55bbee96c1e.ShaderEditor" />
     <provider android:name="mono.MonoRuntimeProvider" android:exported="false" android:initOrder="2147483647" android:authorities="com.companyname.nrcgl.mono.MonoRuntimeProvider.__mono_init__" />
     <receiver android:name="mono.android.Seppuku">
       <intent-filter>
