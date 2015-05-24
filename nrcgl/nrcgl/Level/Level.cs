@@ -40,7 +40,7 @@ using System.Threading.Tasks;
 
 namespace nrcgl.Level
 {
-	abstract class Level : ILevel
+	public abstract class Level : ILevel
     {
         public enum State
         {

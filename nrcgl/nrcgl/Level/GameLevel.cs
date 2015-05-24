@@ -41,7 +41,7 @@ using System.Threading.Tasks;
 
 namespace nrcgl.Level
 {
-	class GameLevel : Level
+	public class GameLevel : Level
     {
 
 		public GameLevel(int id, string name, GLView gameWindow)

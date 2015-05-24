@@ -70,6 +70,7 @@
     <Compile Include="nrcgl\Level\ILevel.cs" />
     <Compile Include="nrcgl\Level\Level.cs" />
     <Compile Include="nrcgl\Level\GameLevel.cs" />
+    <Compile Include="Game\SpaceShooterGameLevel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
