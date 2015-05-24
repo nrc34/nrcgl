@@ -71,6 +71,9 @@
     <Compile Include="nrcgl\Level\Level.cs" />
     <Compile Include="nrcgl\Level\GameLevel.cs" />
     <Compile Include="Game\SpaceShooterGameLevel.cs" />
+    <Compile Include="Game\SpaceShooter.cs" />
+    <Compile Include="nrcgl\game\IGame.cs" />
+    <Compile Include="nrcgl\shapes\Panel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -95,6 +98,7 @@
     <Folder Include="Resources\drawable-nodpi\" />
     <Folder Include="Game\" />
     <Folder Include="nrcgl\Level\" />
+    <Folder Include="nrcgl\game\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\Models\Torus.xml" />
@@ -103,5 +107,6 @@
     <AndroidAsset Include="Assets\fShader_Torus.txt" />
     <AndroidAsset Include="Assets\vShader_Torus.txt" />
     <AndroidAsset Include="Assets\sphere3D_smooth.xml" />
+    <AndroidAsset Include="Assets\Panel3D.xml" />
   </ItemGroup>
 </Project>

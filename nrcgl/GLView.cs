@@ -195,8 +195,28 @@ namespace nrcgl
 			Sphere1.TextureId = textureId1;
 			Sphere1.IsVisible = false;
 
+			var Panel1 = new Panel ("panel1", this);
+			Panel1.TextureId = textureId1;
+			Panel1.Rotate (Vector3.UnitX, -MathHelper.PiOver2);
+			Panel1.Scale = new Vector3 (5);
+			Panel1.Position = 
+				new Vector3 (Panel1.Position.X,
+							 Panel1.Position.Y - 3,
+							 Panel1.Position.Z);
+
+			var Panel2 = new Panel ("panel2", this);
+			Panel2.TextureId = textureId1;
+			Panel2.Rotate (Vector3.UnitX, -MathHelper.PiOver2);
+			Panel2.Scale = new Vector3 (5);
+			Panel2.Position = 
+				new Vector3 (Panel2.Position.X,
+					Panel2.Position.Y - 3,
+					Panel2.Position.Z + 10f);
+
 			Shapes3D.Add (MainShape.Name, MainShape);
 			Shapes3D.Add (Sphere1.Name, Sphere1);
+			Shapes3D.Add (Panel1.Name, Panel1);
+			Shapes3D.Add (Panel2.Name, Panel2);
 
 			Shapes2Remove = new Stack<Shape3D>();
 
@@ -372,6 +392,32 @@ namespace nrcgl
 
 			Shapes3D ["main_shape"].Rotate (Vector3.UnitZ, 0.01f);
 
+			Shapes3D ["panel1"].Position = 
+				new Vector3 (
+				Shapes3D ["panel1"].Position.X,
+				Shapes3D ["panel1"].Position.Y,
+				Shapes3D ["panel1"].Position.Z - 0.01f);
+
+			Shapes3D ["panel2"].Position = 
+				new Vector3 (
+					Shapes3D ["panel2"].Position.X,
+					Shapes3D ["panel2"].Position.Y,
+					Shapes3D ["panel2"].Position.Z - 0.01f);
+
+			if (Shapes3D ["panel2"].Position.Z < -10f)
+				Shapes3D ["panel2"].Position = new Vector3 (
+					Shapes3D ["panel2"].Position.X,
+					Shapes3D ["panel2"].Position.Y,
+					Shapes3D ["panel1"].Position.Z + 10); 
+
+			if (Shapes3D ["panel1"].Position.Z < -10f)
+				Shapes3D ["panel1"].Position = new Vector3 (
+					Shapes3D ["panel1"].Position.X,
+					Shapes3D ["panel1"].Position.Y,
+					Shapes3D ["panel2"].Position.Z + 10); 
+
+			mainActivity.mTextViewInfoVShader.Text = Shapes3D ["panel1"].Position.ToString ();
+			
 			while (Shapes2Remove.Count > 0)
 				Shapes3D.Remove(Shapes2Remove.Pop().Name);
 
@@ -429,8 +475,6 @@ namespace nrcgl
 					break;
 
 				case MotionEventActions.Up:
-
-					mainActivity.mTextViewInfoVShader.Text = moveX.ToString () + "##" + touchCounter.ToString() + "$$" + Shapes3D ["main_shape"].Position;
 
 					#region shoot
 					if (moveX <= 1 && moveX >= -1) {
