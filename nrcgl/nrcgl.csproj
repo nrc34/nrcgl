@@ -67,6 +67,9 @@
     <Compile Include="nrcgl\shapes\ShapeManager.cs" />
     <Compile Include="nrcgl\Texture.cs" />
     <Compile Include="nrcgl\shapes\Sphere.cs" />
+    <Compile Include="nrcgl\Level\ILevel.cs" />
+    <Compile Include="nrcgl\Level\Level.cs" />
+    <Compile Include="nrcgl\Level\GameLevel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -90,6 +93,7 @@
     <Folder Include="nrcgl\shapes\" />
     <Folder Include="Resources\drawable-nodpi\" />
     <Folder Include="Game\" />
+    <Folder Include="nrcgl\Level\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\Models\Torus.xml" />

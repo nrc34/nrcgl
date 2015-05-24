@@ -34,7 +34,6 @@ namespace nrcgl
 		float yTouch;
 
 		Matrix4 mProjectionMatrix;
-		Matrix4 mViewMatrix;
 
 		float rotateY = 0f;
 		float rotateX = 0f;
@@ -55,6 +54,8 @@ namespace nrcgl
 		Camera Camera;
 
 		int textureId;
+
+		int touchCounter;
 
 
 
@@ -231,8 +232,9 @@ namespace nrcgl
 
 			float ratio = (float) viewportWidth / viewportHeight;
 
-			// this projection matrix is applied to object coordinates
-			// in the onDrawFrame() method
+
+			// set the projection matrix
+
 			mProjectionMatrix = 
 				OpenTK.Matrix4.
 					CreatePerspectiveFieldOfView(MathHelper.PiOver4,
@@ -241,7 +243,6 @@ namespace nrcgl
 															1000.0f);
 
 			// Set the camera position (View matrix)
-			//mViewMatrix = Matrix4.LookAt(0, 3, -5, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
 
 			Camera = new Camera ();
 
@@ -251,7 +252,6 @@ namespace nrcgl
 			Camera.Position = new Vector3 (0, -5, 0);
 			Camera.Update ();
 
-			//Camera.View = mViewMatrix;
 
 			GL.UseProgram (Shapes3D["main_shape"].Shader.Program);
 
@@ -343,10 +343,34 @@ namespace nrcgl
 
 			GL.UseProgram (0);
 
-			CurrShape.Quaternion = (Quaternion.FromAxisAngle (Vector3.UnitY, rotateY * 3) *
-				Quaternion.FromAxisAngle (Vector3.UnitX, rotateX * 3));
-			
-			CurrShape.Scale = new Vector3 (scale);
+//			CurrShape.Quaternion = (Quaternion.FromAxisAngle (Vector3.UnitY, rotateY * 3) *
+//				Quaternion.FromAxisAngle (Vector3.UnitX, rotateX * 3));
+//			
+//			CurrShape.Scale = new Vector3 (scale);
+
+			if (Shapes3D ["main_shape"].Position.X > 1f) {
+
+				Shapes3D ["main_shape"].Position = 
+					new Vector3 (1f, 
+						Shapes3D ["main_shape"].Position.Y,
+						Shapes3D ["main_shape"].Position.Z);
+
+				Shapes3D ["main_shape"].ShapeActions = 
+					new Queue<ShapeAction> ();
+			}
+
+			if (Shapes3D ["main_shape"].Position.X < -1f) {
+
+				Shapes3D ["main_shape"].Position = 
+					new Vector3 (-1f, 
+						Shapes3D ["main_shape"].Position.Y,
+						Shapes3D ["main_shape"].Position.Z);
+
+				Shapes3D ["main_shape"].ShapeActions = 
+					new Queue<ShapeAction> ();
+			}
+
+			Shapes3D ["main_shape"].Rotate (Vector3.UnitZ, 0.01f);
 
 			while (Shapes2Remove.Count > 0)
 				Shapes3D.Remove(Shapes2Remove.Pop().Name);
@@ -357,10 +381,12 @@ namespace nrcgl
 					Shapes3D, 
 					Shapes2Remove);
 
+
 				shape.Value.Update (Camera, mProjectionMatrix);
 			}
 
 			updateCounter++;
+			touchCounter++;
 		}
 
 
@@ -376,29 +402,45 @@ namespace nrcgl
 				switch (e.Action) {
 
 				case MotionEventActions.Down:
-					xTouch = e.GetX ();
-					yTouch = e.GetY ();
+					touchCounter = 0;
+					xTouch = e.GetX (0);
+					yTouch = e.GetY (0);
+					pointer1ID = e.GetPointerId (0);
 					moveX = 0;
 					break;
 
 				case MotionEventActions.Move:
-					rotateY += speed * (e.GetX () - xTouch);
-					moveX += (e.GetX () - xTouch);
-					xTouch = e.GetX ();
-					rotateX -= speed * (e.GetY () - yTouch);
-					moveY -= speed * (e.GetY () - yTouch);
-					yTouch = e.GetY ();
+
+					try {
+
+						rotateY += speed * (e.GetX (e.FindPointerIndex(pointer1ID)) - xTouch);
+						moveX = (e.GetX (e.FindPointerIndex(pointer1ID)) - xTouch);
+						xTouch = e.GetX (e.FindPointerIndex(pointer1ID));
+						rotateX -= speed * (e.GetY (e.FindPointerIndex(pointer1ID)) - yTouch);
+						moveY -= speed * (e.GetY (e.FindPointerIndex(pointer1ID)) - yTouch);
+						yTouch = e.GetY (e.FindPointerIndex(pointer1ID));
+						
+					} catch (Exception) {
+
+						pointer1ID = e.GetPointerId (0);
+						
+					}
+
 					break;
 
 				case MotionEventActions.Up:
+
+					mainActivity.mTextViewInfoVShader.Text = moveX.ToString () + "##" + touchCounter.ToString() + "$$" + Shapes3D ["main_shape"].Position;
+
 					#region shoot
-					if (moveX <= 10 && moveX >= -10) {
+					if (moveX <= 1 && moveX >= -1) {
 						var bullet = new Sphere (
 							             "bullet" + Guid.NewGuid ().ToString (), 
 							             this);
 						bullet.TextureId = textureId;
 						bullet.Scale = new Vector3 (0.05f);
-						bullet.Position = new Vector3 (Shapes3D ["main_shape"].Position.X,
+						bullet.Position = new Vector3 (
+							Shapes3D ["main_shape"].Position.X,
 							Shapes3D ["main_shape"].Position.Y,
 							Shapes3D ["main_shape"].Position.Z);
 						bullet.LifeTime.Max = 500;
@@ -419,12 +461,14 @@ namespace nrcgl
 											lifeTime.Max,
 											lifeTime.Counter));
 								}),
-							new LifeTime (500)));
+							new LifeTime (1000)));
 						Shapes3D.Add (bullet.Name, bullet);
+						moveX = 0;
+						break;
 					}
 					#endregion
-					int mf = 20;
-					if (moveX < -10) {
+					int mf = (int)moveX * 2;
+					if (moveX < -1) {
 						Shapes3D ["main_shape"].ShapeActions.
 						Enqueue (new ShapeAction (
 							new Action<Shape3D, LifeTime> (
@@ -433,18 +477,12 @@ namespace nrcgl
 									shape.Position = 
 										new Vector3 (
 										shape.Position.X +
-										Tween.Solve (
-												Tween.Function.Elastic,
-											Tween.Ease.InOut,
-											0f,
-											0.1f,
-											lifeTime.Max,
-											lifeTime.Counter),
+											lifeTime.Max / (float)200,
 										shape.Position.Y,
 										shape.Position.Z);
 								}),
-							new LifeTime ((int)-moveX/mf)));
-					} else if (moveX > 10) {
+							new LifeTime (-mf)));
+					} else if (moveX > 1) {
 						Shapes3D ["main_shape"].ShapeActions.
 						Enqueue (new ShapeAction (
 							new Action<Shape3D, LifeTime> (
@@ -452,19 +490,14 @@ namespace nrcgl
 
 									shape.Position = 
 										new Vector3 (
-											shape.Position.X  -
-											Tween.Solve (
-												Tween.Function.Cubic,
-												Tween.Ease.Out,
-												0f,
-												0.1f,
-												lifeTime.Max,
-												lifeTime.Counter),
-											shape.Position.Y,
-											shape.Position.Z);
+										shape.Position.X -
+											lifeTime.Max / (float)500,
+										shape.Position.Y,
+										shape.Position.Z);
 								}),
-							new LifeTime ((int)moveX/mf)));
+							new LifeTime (mf)));
 					}
+					moveX = 0;
 
 					break;
 
@@ -513,6 +546,8 @@ namespace nrcgl
 			} else if(e.PointerCount == 3){
 
 				mainActivity.mTextViewInfoFShader.Text = Width.ToString () + ":" + Height.ToString ();
+
+
 			}
 
 			return true;

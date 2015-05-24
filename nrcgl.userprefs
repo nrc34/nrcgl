@@ -1,18 +1,19 @@
 ﻿<Properties StartupItem="nrcgl\nrcgl.csproj" GitUserInfo="UsingGIT">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.02939e3c" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.Nexus 5 (KitKat)" />
   <MonoDevelop.Ide.Workbench ActiveDocument="nrcgl\GLView.cs">
     <Files>
-      <File FileName="nrcgl\GLView.cs" Line="137" Column="63" />
+      <File FileName="nrcgl\GLView.cs" Line="375" Column="58" />
       <File FileName="nrcgl\MainActivity.cs" Line="1" Column="1" />
       <File FileName="nrcgl\nrcgl\Tools.cs" Line="1" Column="1" />
       <File FileName="nrcgl\nrcgl\shapes\Shape3D.cs" Line="11" Column="15" />
-      <File FileName="..\..\Visual Studio 2013\Projects\OpenTK_NRCGL\OpenTK_NRCGL\NRCGL\Shapes\Shape3D.cs" Line="61" Column="45" />
+      <File FileName="..\..\Visual Studio 2013\Projects\OpenTK_NRCGL\OpenTK_NRCGL\NRCGL\Shapes\Shape3D.cs" Line="1" Column="1" />
       <File FileName="nrcgl\nrcgl\shapes\ShapeManager.cs" Line="1" Column="1" />
       <File FileName="nrcgl\Assets\fShader_Torus.txt" Line="1" Column="1" />
-      <File FileName="nrcgl\nrcgl\shapes\Torus.cs" Line="28" Column="52" />
-      <File FileName="nrcgl\nrcgl\shapes\Sphere.cs" Line="15" Column="36" />
-      <File FileName="..\..\Visual Studio 2013\Projects\OpenTK_NRCGL\OpenTK_NRCGL\NRCGL\Shapes\Sphere3D.cs" Line="47" Column="1" />
-      <File FileName="nrcgl\nrcgl\IWGameable.cs" Line="8" Column="13" />
+      <File FileName="nrcgl\nrcgl\shapes\Torus.cs" Line="1" Column="1" />
+      <File FileName="nrcgl\nrcgl\shapes\Sphere.cs" Line="1" Column="1" />
+      <File FileName="..\..\Visual Studio 2013\Projects\OpenTK_NRCGL\OpenTK_NRCGL\NRCGL\Shapes\Sphere3D.cs" Line="1" Column="1" />
+      <File FileName="nrcgl\nrcgl\IWGameable.cs" Line="1" Column="1" />
+      <File FileName="nrcgl\nrcgl\Camera.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
