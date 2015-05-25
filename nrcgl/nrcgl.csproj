@@ -74,6 +74,8 @@
     <Compile Include="Game\SpaceShooter.cs" />
     <Compile Include="nrcgl\game\IGame.cs" />
     <Compile Include="nrcgl\shapes\Panel.cs" />
+    <Compile Include="Game\GameActions.cs" />
+    <Compile Include="nrcgl\Move2XY.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

@@ -57,6 +57,8 @@ namespace nrcgl
 
 		int touchCounter;
 
+		int shootCoolDown = 0;
+		int moveCoolDown = 0;
 
 
 		public GLView (Context context, IAttributeSet attrs) :
@@ -147,8 +149,8 @@ namespace nrcgl
 			Shape.LifeTime.Max = 1000;
 			Shape.ShapeActions = new Queue<ShapeAction>();
 			Shape.ShapeActions.Enqueue(new ShapeAction(
-				new Action<Shape3D, LifeTime>(
-					(shape, lifeTime) => {
+				new Action<Shape3D, LifeTime, Object>(
+					(shape, lifeTime, Object) => {
 						shape.Rotate(Vector3.UnitY,0.01f);
 
 						shape.Scale = 
@@ -163,8 +165,8 @@ namespace nrcgl
 					}),
 				new LifeTime(500)));
 			Shape.ShapeActions.Enqueue(new ShapeAction(
-				new Action<Shape3D, LifeTime>(
-					(shape, lifeTime) => {
+				new Action<Shape3D, LifeTime, Object>(
+					(shape, lifeTime, Object) => {
 						shape.Rotate(Vector3.UnitY,0.01f);
 
 						shape.Scale = 
@@ -255,12 +257,19 @@ namespace nrcgl
 
 			// set the projection matrix
 
+//			mProjectionMatrix = 
+//				OpenTK.Matrix4.
+//				 CreatePerspectiveFieldOfView(MathHelper.PiOver2,
+//															ratio, 
+//															0.5f, 
+//															20.0f);
+
 			mProjectionMatrix = 
 				OpenTK.Matrix4.
-					CreatePerspectiveFieldOfView(MathHelper.PiOver4,
-															ratio, 
-															0.5f, 
-															1000.0f);
+					CreateOrthographic (viewportWidth, 
+					                    viewportHeight, 
+					                    0.5f, 
+					                    20f);
 
 			// Set the camera position (View matrix)
 
@@ -417,6 +426,42 @@ namespace nrcgl
 					Shapes3D ["panel2"].Position.Z + 10); 
 
 			mainActivity.mTextViewInfoVShader.Text = Shapes3D ["panel1"].Position.ToString ();
+
+			#region shoot
+			if(shootCoolDown == 0) {
+				var bullet = new Sphere (
+					"bullet" + Guid.NewGuid ().ToString (), 
+					this);
+				bullet.TextureId = textureId;
+				bullet.Scale = new Vector3 (0.05f);
+				bullet.Position = new Vector3 (
+					Shapes3D ["main_shape"].Position.X,
+					Shapes3D ["main_shape"].Position.Y,
+					Shapes3D ["main_shape"].Position.Z);
+				bullet.LifeTime.Max = 500;
+				bullet.ShapeActions = new Queue<ShapeAction> ();
+				bullet.ShapeActions.Enqueue (new ShapeAction (
+					new Action<Shape3D, LifeTime, Object> (
+						(shape, lifeTime, Object) => {
+
+							shape.Position = 
+								new Vector3 (shape.Position.X,
+									shape.Position.Y,
+									shape.Position.Z +
+									Tween.Solve (
+										Tween.Function.Cubic,
+										Tween.Ease.Out,
+										0f,
+										0.5f,
+										lifeTime.Max,
+										lifeTime.Counter));
+						}),
+					new LifeTime (1000)));
+				Shapes3D.Add (bullet.Name, bullet);
+				shootCoolDown = 10;
+			}
+			shootCoolDown--;
+			#endregion
 			
 			while (Shapes2Remove.Count > 0)
 				Shapes3D.Remove(Shapes2Remove.Pop().Name);
@@ -451,8 +496,19 @@ namespace nrcgl
 					touchCounter = 0;
 					xTouch = e.GetX (0);
 					yTouch = e.GetY (0);
+
+					var to = new Vector2 (xTouch, yTouch);
+					var from = new Vector2 (Shapes3D ["main_shape"].Position.X, 
+											Shapes3D ["main_shape"].Position.Z);
+					
+					Shapes3D ["main_shape"].ShapeActions.Enqueue (
+						GameActions.Move2XY(Shapes3D ["main_shape"], 
+								new Move2XY(from, to)));
+
 					pointer1ID = e.GetPointerId (0);
 					moveX = 0;
+
+
 					break;
 
 				case MotionEventActions.Move:
@@ -465,7 +521,19 @@ namespace nrcgl
 						rotateX -= speed * (e.GetY (e.FindPointerIndex(pointer1ID)) - yTouch);
 						moveY -= speed * (e.GetY (e.FindPointerIndex(pointer1ID)) - yTouch);
 						yTouch = e.GetY (e.FindPointerIndex(pointer1ID));
-						
+
+						if(moveCoolDown == 0){
+							var to1 = new Vector2 (xTouch, yTouch);
+							var from1 = new Vector2 (Shapes3D ["main_shape"].Position.X, 
+								Shapes3D ["main_shape"].Position.Z);
+
+							Shapes3D ["main_shape"].ShapeActions.Enqueue (
+								GameActions.Move2XY(Shapes3D ["main_shape"], 
+									new Move2XY(from1, to1)));
+
+							moveCoolDown = 7;
+						}
+						moveCoolDown--;
 					} catch (Exception) {
 
 						pointer1ID = e.GetPointerId (0);
@@ -476,47 +544,13 @@ namespace nrcgl
 
 				case MotionEventActions.Up:
 
-					#region shoot
-					if (moveX <= 1 && moveX >= -1) {
-						var bullet = new Sphere (
-							             "bullet" + Guid.NewGuid ().ToString (), 
-							             this);
-						bullet.TextureId = textureId;
-						bullet.Scale = new Vector3 (0.05f);
-						bullet.Position = new Vector3 (
-							Shapes3D ["main_shape"].Position.X,
-							Shapes3D ["main_shape"].Position.Y,
-							Shapes3D ["main_shape"].Position.Z);
-						bullet.LifeTime.Max = 500;
-						bullet.ShapeActions = new Queue<ShapeAction> ();
-						bullet.ShapeActions.Enqueue (new ShapeAction (
-							new Action<Shape3D, LifeTime> (
-								(shape, lifeTime) => {
 
-									shape.Position = 
-										new Vector3 (shape.Position.X,
-										shape.Position.Y,
-										shape.Position.Z +
-										Tween.Solve (
-											Tween.Function.Cubic,
-											Tween.Ease.Out,
-											0f,
-											0.5f,
-											lifeTime.Max,
-											lifeTime.Counter));
-								}),
-							new LifeTime (1000)));
-						Shapes3D.Add (bullet.Name, bullet);
-						moveX = 0;
-						break;
-					}
-					#endregion
 					int mf = (int)moveX * 2;
 					if (moveX < -1) {
 						Shapes3D ["main_shape"].ShapeActions.
 						Enqueue (new ShapeAction (
-							new Action<Shape3D, LifeTime> (
-								(shape, lifeTime) => {
+							new Action<Shape3D, LifeTime, Object> (
+								(shape, lifeTime, Object) => {
 
 									shape.Position = 
 										new Vector3 (
@@ -529,8 +563,8 @@ namespace nrcgl
 					} else if (moveX > 1) {
 						Shapes3D ["main_shape"].ShapeActions.
 						Enqueue (new ShapeAction (
-							new Action<Shape3D, LifeTime> (
-								(shape, lifeTime) => {
+							new Action<Shape3D, LifeTime, Object> (
+								(shape, lifeTime, Object) => {
 
 									shape.Position = 
 										new Vector3 (
