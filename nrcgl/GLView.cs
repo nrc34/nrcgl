@@ -356,6 +356,7 @@ namespace nrcgl
 		{
 			base.OnUpdateFrame (e);
 
+			if(moveCoolDown > 0) moveCoolDown--;
 
 			GL.UseProgram (Shapes3D["main_shape"].Shader.Program);
 
@@ -376,28 +377,6 @@ namespace nrcgl
 //				Quaternion.FromAxisAngle (Vector3.UnitX, rotateX * 3));
 //			
 //			CurrShape.Scale = new Vector3 (scale);
-
-			if (Shapes3D ["main_shape"].Position.X > 1f) {
-
-				Shapes3D ["main_shape"].Position = 
-					new Vector3 (1f, 
-						Shapes3D ["main_shape"].Position.Y,
-						Shapes3D ["main_shape"].Position.Z);
-
-				Shapes3D ["main_shape"].ShapeActions = 
-					new Queue<ShapeAction> ();
-			}
-
-			if (Shapes3D ["main_shape"].Position.X < -1f) {
-
-				Shapes3D ["main_shape"].Position = 
-					new Vector3 (-1f, 
-						Shapes3D ["main_shape"].Position.Y,
-						Shapes3D ["main_shape"].Position.Z);
-
-				Shapes3D ["main_shape"].ShapeActions = 
-					new Queue<ShapeAction> ();
-			}
 
 			Shapes3D ["main_shape"].Rotate (Vector3.UnitZ, 0.01f);
 
@@ -499,16 +478,15 @@ namespace nrcgl
 
 					var to = new Vector2 (xTouch, yTouch);
 					var from = new Vector2 (Shapes3D ["main_shape"].Position.X, 
-											Shapes3D ["main_shape"].Position.Z);
-					
-					Shapes3D ["main_shape"].ShapeActions.Enqueue (
-						GameActions.Move2XY(Shapes3D ["main_shape"], 
-								new Move2XY(from, to)));
+						           Shapes3D ["main_shape"].Position.Z);
+					if (moveCoolDown == 0) {
+						Shapes3D ["main_shape"].ShapeActions.Enqueue (
+							GameActions.Move2XY (Shapes3D ["main_shape"], 
+								new Move2XY (from, to)));
 
-					pointer1ID = e.GetPointerId (0);
-					moveX = 0;
-
-
+						pointer1ID = e.GetPointerId (0);
+						moveCoolDown = 7;
+					}
 					break;
 
 				case MotionEventActions.Move:
@@ -533,7 +511,7 @@ namespace nrcgl
 
 							moveCoolDown = 7;
 						}
-						moveCoolDown--;
+
 					} catch (Exception) {
 
 						pointer1ID = e.GetPointerId (0);
@@ -544,38 +522,6 @@ namespace nrcgl
 
 				case MotionEventActions.Up:
 
-
-					int mf = (int)moveX * 2;
-					if (moveX < -1) {
-						Shapes3D ["main_shape"].ShapeActions.
-						Enqueue (new ShapeAction (
-							new Action<Shape3D, LifeTime, Object> (
-								(shape, lifeTime, Object) => {
-
-									shape.Position = 
-										new Vector3 (
-										shape.Position.X +
-											lifeTime.Max / (float)200,
-										shape.Position.Y,
-										shape.Position.Z);
-								}),
-							new LifeTime (-mf)));
-					} else if (moveX > 1) {
-						Shapes3D ["main_shape"].ShapeActions.
-						Enqueue (new ShapeAction (
-							new Action<Shape3D, LifeTime, Object> (
-								(shape, lifeTime, Object) => {
-
-									shape.Position = 
-										new Vector3 (
-										shape.Position.X -
-											lifeTime.Max / (float)500,
-										shape.Position.Y,
-										shape.Position.Z);
-								}),
-							new LifeTime (mf)));
-					}
-					moveX = 0;
 
 					break;
 

@@ -15,9 +15,9 @@ namespace nrcgl
 
 						shape.Position = 
 							new Vector3 (
-								(-(move2xy.To.X * 2 - 270) / 270 - move2xy.From.X) * 2f / (float)lifeTime.Max,
+								shape.Position.X + (-(move2xy.To.X * 2f - 270f - 270f) / (float)270 - move2xy.From.X) / (float)lifeTime.Max,
 								shape.Position.Y,
-								(-(move2xy.To.Y * 2 - 404) / 404 - move2xy.From.Y) * 2f / (float)lifeTime.Max
+								shape.Position.Z +(-(move2xy.To.Y * 2f - 404f - 600f) / (float)404 - move2xy.From.Y) / (float)lifeTime.Max
 							);
 					}),
 				new LifeTime (5),
