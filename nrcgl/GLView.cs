@@ -431,13 +431,13 @@ namespace nrcgl
 										Tween.Function.Cubic,
 										Tween.Ease.Out,
 										0f,
-										0.5f,
+										0.7f,
 										lifeTime.Max,
 										lifeTime.Counter));
 						}),
-					new LifeTime (1000)));
+					new LifeTime (500)));
 				Shapes3D.Add (bullet.Name, bullet);
-				shootCoolDown = 10;
+				shootCoolDown = 5;
 			}
 			shootCoolDown--;
 			#endregion
@@ -478,13 +478,15 @@ namespace nrcgl
 
 					var to = new Vector2 (xTouch, yTouch);
 					var from = new Vector2 (Shapes3D ["main_shape"].Position.X, 
-						           Shapes3D ["main_shape"].Position.Z);
+						                    Shapes3D ["main_shape"].Position.Z);
+					
+					pointer1ID = e.GetPointerId (0);
+
 					if (moveCoolDown == 0) {
 						Shapes3D ["main_shape"].ShapeActions.Enqueue (
-							GameActions.Move2XY (Shapes3D ["main_shape"], 
+							GameActions.Move2XY (
 								new Move2XY (from, to)));
-
-						pointer1ID = e.GetPointerId (0);
+						
 						moveCoolDown = 7;
 					}
 					break;
@@ -503,10 +505,10 @@ namespace nrcgl
 						if(moveCoolDown == 0){
 							var to1 = new Vector2 (xTouch, yTouch);
 							var from1 = new Vector2 (Shapes3D ["main_shape"].Position.X, 
-								Shapes3D ["main_shape"].Position.Z);
+								                     Shapes3D ["main_shape"].Position.Z);
 
 							Shapes3D ["main_shape"].ShapeActions.Enqueue (
-								GameActions.Move2XY(Shapes3D ["main_shape"], 
+								GameActions.Move2XY(
 									new Move2XY(from1, to1)));
 
 							moveCoolDown = 7;
