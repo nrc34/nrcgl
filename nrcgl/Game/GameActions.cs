@@ -13,18 +13,21 @@ namespace nrcgl
 				new Action<Shape3D, LifeTime, object> (
 					(shape, lifeTime, _move2xy) => {
 
+						float percentage = (float)lifeTime.Counter / 
+										   (float)lifeTime.Max;
+
 						shape.Position = 
 							new Vector3 (
-								shape.Position.X + ((-((_move2xy as Move2XY).To.X * 2f - 270f - 270f) / 
-									(float)270 - (_move2xy as Move2XY).From.X)) / (float)lifeTime.Max,
+								(_move2xy as Move2XY).From.X + ((-((_move2xy as Move2XY).To.X * 2f - 270f - 270f) / 
+									(float)270 - (_move2xy as Move2XY).From.X)) * percentage,
 								shape.Position.Y,
-								shape.Position.Z +((-((_move2xy as Move2XY).To.Y * 2f - 404f - 600f) / 
-									(float)404 - (_move2xy as Move2XY).From.Y)) / (float)lifeTime.Max
+								(_move2xy as Move2XY).From.Y +((-((_move2xy as Move2XY).To.Y * 2f - 404f - 600f) / 
+									(float)404 - (_move2xy as Move2XY).From.Y)) * percentage
 							);
 					}),
 				new LifeTime (5),
 				move2xy);
-			
+
 		}
 	}
 }

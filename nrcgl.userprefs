@@ -1,5 +1,5 @@
 ﻿<Properties StartupItem="nrcgl\nrcgl.csproj" GitUserInfo="UsingGIT">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.02939e3c" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.Nexus 5 (KitKat)" />
   <MonoDevelop.Ide.Workbench ActiveDocument="nrcgl\GLView.cs">
     <Files>
       <File FileName="nrcgl\MainActivity.cs" Line="1" Column="1" />
@@ -14,14 +14,14 @@
       <File FileName="nrcgl\nrcgl\shapes\Panel.cs" Line="1" Column="1" />
       <File FileName="nrcgl\nrcgl\Camera.cs" Line="1" Column="1" />
       <File FileName="nrcgl\nrcgl\Level\ILevel.cs" Line="1" Column="1" />
-      <File FileName="nrcgl\nrcgl\Level\Level.cs" Line="43" Column="9" />
-      <File FileName="nrcgl\nrcgl\Level\GameLevel.cs" Line="44" Column="15" />
+      <File FileName="nrcgl\nrcgl\Level\Level.cs" Line="1" Column="1" />
+      <File FileName="nrcgl\nrcgl\Level\GameLevel.cs" Line="1" Column="1" />
       <File FileName="nrcgl\Game\SpaceShooterGameLevel.cs" Line="1" Column="1" />
-      <File FileName="nrcgl\nrcgl\shapes\Action.cs" Line="59" Column="54" />
+      <File FileName="nrcgl\nrcgl\shapes\Action.cs" Line="12" Column="19" />
       <File FileName="nrcgl\Game\SpaceShooter.cs" Line="1" Column="1" />
-      <File FileName="nrcgl\Game\GameActions.cs" Line="18" Column="61" />
+      <File FileName="nrcgl\Game\GameActions.cs" Line="21" Column="76" />
       <File FileName="nrcgl\nrcgl\Move2XY.cs" Line="20" Column="12" />
-      <File FileName="nrcgl\GLView.cs" Line="489" Column="7" />
+      <File FileName="nrcgl\GLView.cs" Line="434" Column="14" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -60,6 +60,8 @@ namespace nrcgl
 		int shootCoolDown = 0;
 		int moveCoolDown = 0;
 
+		Vector2 moveMainTo;
+
 
 		public GLView (Context context, IAttributeSet attrs) :
 		base (context, attrs)
@@ -189,9 +191,11 @@ namespace nrcgl
 			var MainShape = new Torus ("main_shape", this);
 			MainShape.TextureId = textureId;
 			MainShape.Scale = new Vector3 (0.2f);
-			MainShape.Position = new Vector3 (-1f, 0, -1);
+			MainShape.Position = new Vector3 (-1f, 0, -1f);
 			MainShape.IsVisible = true;
 			MainShape.ShapeActions = new Queue<ShapeAction>();
+
+			moveMainTo = new Vector2 (-1f, 1f);
 
 			var Sphere1 = new Sphere ("sphere1", this);
 			Sphere1.TextureId = textureId1;
@@ -356,8 +360,6 @@ namespace nrcgl
 		{
 			base.OnUpdateFrame (e);
 
-			if(moveCoolDown > 0) moveCoolDown--;
-
 			GL.UseProgram (Shapes3D["main_shape"].Shader.Program);
 
 			GL.Uniform4(mSeekBarsHandle, 
@@ -441,6 +443,24 @@ namespace nrcgl
 			}
 			shootCoolDown--;
 			#endregion
+
+			if (moveMainTo != 
+				new Vector2 (Shapes3D ["main_shape"].Position.X, 
+					         Shapes3D ["main_shape"].Position.Z)
+				&& moveCoolDown == 0) {
+
+				var to = new Vector2 (moveMainTo.X, moveMainTo.Y);
+				var from = new Vector2 (Shapes3D ["main_shape"].Position.X, 
+					Shapes3D ["main_shape"].Position.Z);
+
+				Shapes3D ["main_shape"].ShapeActions.Enqueue (
+					GameActions.Move2XY(
+						new Move2XY(from, to)));
+
+				moveCoolDown = 7;
+			}
+
+
 			
 			while (Shapes2Remove.Count > 0)
 				Shapes3D.Remove(Shapes2Remove.Pop().Name);
@@ -457,6 +477,7 @@ namespace nrcgl
 
 			updateCounter++;
 			touchCounter++;
+			if(moveCoolDown > 0) moveCoolDown--;
 		}
 
 
@@ -476,19 +497,8 @@ namespace nrcgl
 					xTouch = e.GetX (0);
 					yTouch = e.GetY (0);
 
-					var to = new Vector2 (xTouch, yTouch);
-					var from = new Vector2 (Shapes3D ["main_shape"].Position.X, 
-						                    Shapes3D ["main_shape"].Position.Z);
-					
-					pointer1ID = e.GetPointerId (0);
+					moveMainTo =  new Vector2 (xTouch, yTouch);
 
-					if (moveCoolDown == 0) {
-						Shapes3D ["main_shape"].ShapeActions.Enqueue (
-							GameActions.Move2XY (
-								new Move2XY (from, to)));
-						
-						moveCoolDown = 7;
-					}
 					break;
 
 				case MotionEventActions.Move:
@@ -502,17 +512,7 @@ namespace nrcgl
 						moveY -= speed * (e.GetY (e.FindPointerIndex(pointer1ID)) - yTouch);
 						yTouch = e.GetY (e.FindPointerIndex(pointer1ID));
 
-						if(moveCoolDown == 0){
-							var to1 = new Vector2 (xTouch, yTouch);
-							var from1 = new Vector2 (Shapes3D ["main_shape"].Position.X, 
-								                     Shapes3D ["main_shape"].Position.Z);
-
-							Shapes3D ["main_shape"].ShapeActions.Enqueue (
-								GameActions.Move2XY(
-									new Move2XY(from1, to1)));
-
-							moveCoolDown = 7;
-						}
+						moveMainTo =  new Vector2 (xTouch, yTouch);
 
 					} catch (Exception) {
 
