@@ -14,10 +14,23 @@ namespace nrcgl
 			get;
 			set;
 		}
-		public Move2XY (Vector2 from, Vector2 to)
+
+		public float ViewportHeight {
+			get;
+			set;
+		}
+
+		public float ViewportWidth {
+			get;
+			set;
+		}
+
+		public Move2XY (Vector2 from, Vector2 to, int viewportWidth, int viewportHeight)
 		{
 			From = from;
 			To = to;
+			ViewportWidth = (float)viewportWidth;
+			ViewportHeight = (float)viewportHeight;
 		}
 	}
 }

@@ -455,7 +455,7 @@ namespace nrcgl
 
 				Shapes3D ["main_shape"].ShapeActions.Enqueue (
 					GameActions.Move2XY(
-						new Move2XY(from, to)));
+						new Move2XY(from, to, Width, Height)));
 
 				moveCoolDown = 7;
 			}
