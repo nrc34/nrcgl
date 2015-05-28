@@ -76,6 +76,7 @@
     <Compile Include="nrcgl\shapes\Panel.cs" />
     <Compile Include="Game\GameActions.cs" />
     <Compile Include="nrcgl\Move2XY.cs" />
+    <Compile Include="nrcgl\shapes\Rock.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
