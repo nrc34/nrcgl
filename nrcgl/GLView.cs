@@ -17,6 +17,7 @@ using System.Threading;
 using OpenTK.Graphics;
 using nrcgl.nrcgl.shapes;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace nrcgl
 {
@@ -460,12 +461,57 @@ namespace nrcgl
 				moveCoolDown = 7;
 			}
 
+			if (updateCounter % 20 ==0) {
+
+				Shape3D rock = new Rock ("rock" + Guid.NewGuid ().ToString (),
+				   	                     this);
+				var randX = new Random ();
+				float randomX = 2f * (float)randX.NextDouble () - 1f;
+				rock.Position = new Vector3 ((float) randomX, 0, 2.5f);
+				rock.Scale = new Vector3 (0.2f);
+				rock.TextureId = textureId;
+				rock.LifeTime.Max = 500;
+				rock.ShapeActions = new Queue<ShapeAction>();
+				rock.ShapeActions.Enqueue(new ShapeAction(
+					new Action<Shape3D, LifeTime, Object>(
+						(shape, lifeTime, Object) => {
+							shape.Rotate(Vector3.UnitX, 0.04f);
+							shape.Rotate(Vector3.UnitY, 0.03f);
+
+							shape.Position = 
+								new Vector3(shape.Position.X,
+											shape.Position.Y,
+											shape.Position.Z -0.03f);
+
+						}),
+					new LifeTime(500)));
+				Shapes3D.Add (rock.Name, rock);
+			}
+
 
 			
 			while (Shapes2Remove.Count > 0)
 				Shapes3D.Remove(Shapes2Remove.Pop().Name);
 
 			foreach (var shape in Shapes3D) {
+
+				if (shape.Key.Contains ("rock")) {
+
+					var bullets = 
+						new List <string> (Shapes3D.Keys).
+							Where((st) => (st.Contains("bullet")));
+					
+					foreach (var item in bullets) {
+						bool hitX = Math.Abs (Shapes3D [item].Position.X - shape.Value.Position.X) < 0.2f;
+						bool hitZ = Math.Abs (Shapes3D [item].Position.Z - shape.Value.Position.Z) < 0.2f;
+
+						if (hitX && hitZ) {
+							Shapes2Remove.Push (shape.Value);
+							shape.Value.IsVisible = false;
+						}
+					}
+
+				}
 				
 				ShapeManager.Manage(shape.Value, 
 					Shapes3D, 
