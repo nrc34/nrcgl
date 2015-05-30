@@ -1,6 +1,6 @@
 ﻿<Properties StartupItem="nrcgl\nrcgl.csproj" GitUserInfo="UsingGIT">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.02939e3c" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="nrcgl\nrcgl\shapes\Rock.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.Nexus 5 (KitKat)" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="nrcgl\README.md">
     <Files>
       <File FileName="nrcgl\MainActivity.cs" Line="1" Column="1" />
       <File FileName="nrcgl\nrcgl\Tools.cs" Line="1" Column="1" />
@@ -11,7 +11,7 @@
       <File FileName="nrcgl\nrcgl\shapes\Sphere.cs" Line="1" Column="1" />
       <File FileName="..\..\Visual Studio 2013\Projects\OpenTK_NRCGL\OpenTK_NRCGL\NRCGL\Shapes\Sphere3D.cs" Line="1" Column="1" />
       <File FileName="nrcgl\nrcgl\shapes\Torus.cs" Line="1" Column="1" />
-      <File FileName="nrcgl\nrcgl\shapes\Panel.cs" Line="28" Column="4" />
+      <File FileName="nrcgl\nrcgl\shapes\Panel.cs" Line="1" Column="1" />
       <File FileName="nrcgl\nrcgl\Camera.cs" Line="1" Column="1" />
       <File FileName="nrcgl\nrcgl\Level\ILevel.cs" Line="1" Column="1" />
       <File FileName="nrcgl\nrcgl\Level\Level.cs" Line="1" Column="1" />
@@ -20,9 +20,10 @@
       <File FileName="nrcgl\nrcgl\shapes\Action.cs" Line="1" Column="1" />
       <File FileName="nrcgl\Game\SpaceShooter.cs" Line="1" Column="1" />
       <File FileName="nrcgl\nrcgl\Move2XY.cs" Line="1" Column="1" />
-      <File FileName="nrcgl\GLView.cs" Line="1" Column="1" />
-      <File FileName="nrcgl\Game\GameActions.cs" Line="25" Column="53" />
-      <File FileName="nrcgl\nrcgl\shapes\Rock.cs" Line="13" Column="39" />
+      <File FileName="nrcgl\GLView.cs" Line="479" Column="40" />
+      <File FileName="nrcgl\Game\GameActions.cs" Line="1" Column="1" />
+      <File FileName="nrcgl\nrcgl\shapes\Rock.cs" Line="14" Column="4" />
+      <File FileName="nrcgl\README.md" Line="6" Column="29" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

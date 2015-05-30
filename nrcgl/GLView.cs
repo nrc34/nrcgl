@@ -505,9 +505,19 @@ namespace nrcgl
 						bool hitX = Math.Abs (Shapes3D [item].Position.X - shape.Value.Position.X) < 0.2f;
 						bool hitZ = Math.Abs (Shapes3D [item].Position.Z - shape.Value.Position.Z) < 0.2f;
 
-						if (hitX && hitZ) {
-							Shapes2Remove.Push (shape.Value);
-							shape.Value.IsVisible = false;
+						if (hitX && hitZ && shape.Value.HitCount == 0) {
+							shape.Value.HitCount++;
+							shape.Value.LifeTime.Max = shape.Value.LifeTime.Counter + 10;
+							shape.Value.ShapeActions = new Queue<ShapeAction> ();
+							shape.Value.ShapeActions.Enqueue(new ShapeAction(
+								new Action<Shape3D, LifeTime, Object>(
+									(shape1, lifeTime, Object) => {
+										if(lifeTime.Counter < 4)
+											shape1.Scale -= new Vector3(0.025f);
+										else
+											shape1.Scale += new Vector3(0.025f);
+									}),
+								new LifeTime(10)));
 						}
 					}
 

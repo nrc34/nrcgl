@@ -3,5 +3,5 @@
 Personal opengl library for android.
 
 Demo video:
-https://youtu.be/lBIGFxzErDs
+http://youtu.be/U12zD-hdg_c
 

@@ -80,6 +80,11 @@ namespace nrcgl.nrcgl.shapes
 			set;
 		}
 
+		public int HitCount {
+			get;
+			set;
+		}
+
 
 
 		public Shape3D (string name,GLView gLView)
@@ -94,6 +99,7 @@ namespace nrcgl.nrcgl.shapes
 			// lifetime with max = 0 (shape is imortal) 
 			LifeTime = new LifeTime(0);
 			IsVisible = true;
+			HitCount = 0;
 		}
 
 
