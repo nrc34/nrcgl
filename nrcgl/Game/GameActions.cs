@@ -18,14 +18,14 @@ namespace nrcgl
 
 						shape.Position = 
 							new Vector3 (
-								(_move2xy as Move2XY).From.X + ((-((_move2xy as Move2XY).To.X * 2f - (_move2xy as Move2XY).ViewportWidth) / 
-									((_move2xy as Move2XY).ViewportWidth / 2f) - (_move2xy as Move2XY).From.X)) * percentage,
+								(_move2xy as Move2XY).From.X + ((-((_move2xy as Move2XY).To.X * 3.8f - (_move2xy as Move2XY).ViewportWidth * 1.9f) / 
+									((_move2xy as Move2XY).ViewportWidth)- (_move2xy as Move2XY).From.X)) * percentage,
 								shape.Position.Y,
-								(_move2xy as Move2XY).From.Y +((-((_move2xy as Move2XY).To.Y * 2f - (_move2xy as Move2XY).ViewportHeight - 200f) / 
-									((_move2xy as Move2XY).ViewportHeight / 2f) - (_move2xy as Move2XY).From.Y)) * percentage
+								(_move2xy as Move2XY).From.Y +((-((_move2xy as Move2XY).To.Y * 6f - (_move2xy as Move2XY).ViewportHeight * 3f) / 
+									((_move2xy as Move2XY).ViewportHeight) - (_move2xy as Move2XY).From.Y) + 0.8f) * percentage
 							);
 					}),
-				new LifeTime (5),
+				new LifeTime (4),
 				move2xy);
 
 		}

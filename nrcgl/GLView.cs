@@ -283,7 +283,7 @@ namespace nrcgl
 
 			Camera.Rotate (Vector3.UnitX, MathHelper.PiOver2);
 			Camera.Rotate (Vector3.UnitY, MathHelper.Pi);
-			Camera.Position = new Vector3 (0, -5, 0);
+			Camera.Position = new Vector3 (0, -8, 0);
 			Camera.Update ();
 
 
@@ -341,7 +341,7 @@ namespace nrcgl
 			if (mainActivity.mRadioBPoint.Checked)
 				beginMode = BeginMode.Points;
 
-			CurrShape.BeginMode = beginMode;
+			//CurrShape.BeginMode = beginMode;
 
 
 			GL.ClearColor (0.0f, 0.0f, 0.0f, 1f);
@@ -350,6 +350,7 @@ namespace nrcgl
 
 
 			foreach (var shape in Shapes3D) {
+				shape.Value.BeginMode = beginMode;
 				shape.Value.Render ();
 			}
 
@@ -407,7 +408,7 @@ namespace nrcgl
 					Shapes3D ["panel1"].Position.Y,
 					Shapes3D ["panel2"].Position.Z + 10); 
 
-			mainActivity.mTextViewInfoVShader.Text = Shapes3D ["panel1"].Position.ToString ();
+			mainActivity.mTextViewInfoVShader.Text = Shapes3D ["main_shape"].Position.ToString ();
 
 			#region shoot
 			if(shootCoolDown == 0) {
@@ -458,7 +459,7 @@ namespace nrcgl
 					GameActions.Move2XY(
 						new Move2XY(from, to, Width, Height)));
 
-				moveCoolDown = 7;
+				moveCoolDown = 6;
 			}
 
 			if (updateCounter % 20 ==0) {
@@ -466,8 +467,8 @@ namespace nrcgl
 				Shape3D rock = new Rock ("rock" + Guid.NewGuid ().ToString (),
 				   	                     this);
 				var randX = new Random ();
-				float randomX = 2f * (float)randX.NextDouble () - 1f;
-				rock.Position = new Vector3 ((float) randomX, 0, 2.5f);
+				float randomX = 3.8f * (float)randX.NextDouble () - 1.9f;
+				rock.Position = new Vector3 ((float) randomX, 0, 3f);
 				rock.Scale = new Vector3 (0.2f);
 				rock.TextureId = textureId;
 				rock.LifeTime.Max = 500;
