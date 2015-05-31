@@ -51,7 +51,10 @@ namespace nrcgl
 			public const int monoandroidsplash = 2130837505;
 			
 			// aapt resource value: 0x7f020002
-			public const int text256x256 = 2130837506;
+			public const int space256x256 = 2130837506;
+			
+			// aapt resource value: 0x7f020003
+			public const int text256x256 = 2130837507;
 			
 			static Drawable()
 			{
