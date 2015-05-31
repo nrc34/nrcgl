@@ -134,76 +134,33 @@ namespace nrcgl
 			// if you've registered delegates for OnLoad
 			base.OnLoad (e);
 
+
+			//Loat textures
 			GL.Enable (EnableCap.Texture2D);
 
 			GL.GenTextures (1, out textureId);
-
 			Texture.LoadTexture (Context, Resource.Drawable.text256x256, textureId);
 
-			int textureId1;
-			GL.GenTextures (1, out textureId1);
+			int texturePanelId;
+			GL.GenTextures (1, out texturePanelId);
+			Texture.LoadTexture (Context, Resource.Drawable.text256x256, texturePanelId);
 
-			Texture.LoadTexture (Context, Resource.Drawable.text256x256, textureId1);
-
-
-
-			var Shape = new Torus ("shape1", this);
-			Shape.TextureId = textureId;
-			Shape.LifeTime.Max = 1000;
-			Shape.ShapeActions = new Queue<ShapeAction>();
-			Shape.ShapeActions.Enqueue(new ShapeAction(
-				new Action<Shape3D, LifeTime, Object>(
-					(shape, lifeTime, Object) => {
-						shape.Rotate(Vector3.UnitY,0.01f);
-
-						shape.Scale = 
-							new Vector3(1 - Tween.Solve(
-									Tween.Function.Cubic,
-									Tween.Ease.Out,
-									0f,
-									1f,
-									lifeTime.Max,
-									lifeTime.Counter));
-
-					}),
-				new LifeTime(500)));
-			Shape.ShapeActions.Enqueue(new ShapeAction(
-				new Action<Shape3D, LifeTime, Object>(
-					(shape, lifeTime, Object) => {
-						shape.Rotate(Vector3.UnitY,0.01f);
-
-						shape.Scale = 
-							new Vector3(Tween.Solve(
-								Tween.Function.Cubic,
-								Tween.Ease.Out,
-								0f,
-								1f,
-								lifeTime.Max,
-								lifeTime.Counter));
-
-					}),
-				new LifeTime(500)));
 			
 			Shapes3D = new Dictionary<string, Shape3D> ();
-
-			Shape.IsVisible = false;
-			Shapes3D.Add (Shape.Name, Shape);
 
 			var MainShape = new Torus ("main_shape", this);
 			MainShape.TextureId = textureId;
 			MainShape.Scale = new Vector3 (0.2f);
-			MainShape.Position = new Vector3 (-1f, 0, -1f);
+			MainShape.Position = new Vector3 (0f, 0f, 0f);
 			MainShape.IsVisible = true;
 			MainShape.ShapeActions = new Queue<ShapeAction>();
 
-			moveMainTo = new Vector2 (-1f, 1f);
-
-			var Sphere1 = new Sphere ("sphere1", this);
-			Sphere1.TextureId = textureId1;
-			Sphere1.IsVisible = false;
+			moveMainTo = 
+				new Vector2 (Width * 0.2f,
+							 Height * 0.8f);
 
 			var Panel1 = new Panel ("panel1", this);
-			Panel1.TextureId = textureId1;
+			Panel1.TextureId = texturePanelId;
 			Panel1.Rotate (Vector3.UnitX, -MathHelper.PiOver2);
 			Panel1.Scale = new Vector3 (5);
 			Panel1.Position = 
@@ -212,7 +169,7 @@ namespace nrcgl
 							 Panel1.Position.Z);
 
 			var Panel2 = new Panel ("panel2", this);
-			Panel2.TextureId = textureId1;
+			Panel2.TextureId = texturePanelId;
 			Panel2.Rotate (Vector3.UnitX, -MathHelper.PiOver2);
 			Panel2.Scale = new Vector3 (5);
 			Panel2.Position = 
@@ -221,28 +178,11 @@ namespace nrcgl
 					Panel2.Position.Z + 10f);
 
 			Shapes3D.Add (MainShape.Name, MainShape);
-			Shapes3D.Add (Sphere1.Name, Sphere1);
 			Shapes3D.Add (Panel1.Name, Panel1);
 			Shapes3D.Add (Panel2.Name, Panel2);
 
 			Shapes2Remove = new Stack<Shape3D>();
 
-
-
-			beginMode = new BeginMode();
-
-			if (mainActivity.mRadioBTriangle.Checked)
-				beginMode = BeginMode.Triangles;
-
-			if (mainActivity.mRadioBLine.Checked)
-				beginMode = BeginMode.Lines;
-
-			if (mainActivity.mRadioBPoint.Checked)
-				beginMode = BeginMode.Points;
-
-			Shapes3D ["main_shape"].BeginMode = beginMode;
-
-			CurrShape = Shapes3D ["main_shape"];
 
 			// Initialize GL
 			viewportHeight = Height; 
@@ -544,9 +484,6 @@ namespace nrcgl
 
 			if (e.PointerCount == 1) {
 
-				float speed = 0.004f;
-
-
 				switch (e.Action) {
 
 				case MotionEventActions.Down:
@@ -562,11 +499,7 @@ namespace nrcgl
 
 					try {
 
-						rotateY += speed * (e.GetX (e.FindPointerIndex(pointer1ID)) - xTouch);
-						moveX = (e.GetX (e.FindPointerIndex(pointer1ID)) - xTouch);
 						xTouch = e.GetX (e.FindPointerIndex(pointer1ID));
-						rotateX -= speed * (e.GetY (e.FindPointerIndex(pointer1ID)) - yTouch);
-						moveY -= speed * (e.GetY (e.FindPointerIndex(pointer1ID)) - yTouch);
 						yTouch = e.GetY (e.FindPointerIndex(pointer1ID));
 
 						moveMainTo =  new Vector2 (xTouch, yTouch);
