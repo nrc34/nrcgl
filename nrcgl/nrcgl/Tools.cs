@@ -6,17 +6,26 @@ using System.IO;
 using OpenTK;
 using Android.Graphics;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace nrcgl
 {
 	public class Tools
 	{
-		public static VertexsIndicesData DeserializeModel(Stream stream)
+		public static Task<VertexsIndicesData> DeserializeModelTask(Stream stream)
+		{
+			var deserializeModelTask = 
+				Task<VertexsIndicesData>.Factory.
+						StartNew(new Func<object, VertexsIndicesData>(DeserializeModel), stream);
+
+			return deserializeModelTask;
+		}
+		public static VertexsIndicesData DeserializeModel(object stream)
 		{
 			VertexsIndicesData vertexsIndicesData = new VertexsIndicesData();
 
 			XmlSerializer xmlSerializer = new XmlSerializer(vertexsIndicesData.GetType());
-			StreamReader reader = new StreamReader(stream);
+			StreamReader reader = new StreamReader(stream as Stream);
 			vertexsIndicesData = (VertexsIndicesData)xmlSerializer.Deserialize(reader);
 
 			reader.Close();

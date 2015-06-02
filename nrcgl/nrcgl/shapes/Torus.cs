@@ -20,7 +20,7 @@ namespace nrcgl
 			} else {
 				var model = glView.mainActivity.Assets.Open (modelName);
 
-				vid = Tools.DeserializeModel (model);
+				vid = Tools.DeserializeModelTask (model).Result;
 
 				VertexsIndicesData = vid;
 			}
