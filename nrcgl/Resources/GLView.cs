@@ -36,11 +36,6 @@ namespace nrcgl
 
 		Matrix4 mProjectionMatrix;
 
-		float rotateY = 0f;
-		float rotateX = 0f;
-		float moveY = 0f;
-		float moveX = 0f;
-
 		float distTouch;
 		float distTouchZero;
 		int pointer1ID;
@@ -50,7 +45,6 @@ namespace nrcgl
 		BeginMode beginMode;
 
 		Dictionary<string, Shape3D> Shapes3D;
-		Shape3D CurrShape;
 		Stack<Shape3D> Shapes2Remove;
 		Camera Camera;
 
@@ -62,6 +56,7 @@ namespace nrcgl
 		int moveCoolDown = 0;
 
 		Vector2 moveMainTo;
+		Vector2 oldMoveMainTo;
 
 
 		public GLView (Context context, IAttributeSet attrs) :
@@ -148,10 +143,12 @@ namespace nrcgl
 			
 			Shapes3D = new Dictionary<string, Shape3D> ();
 
-			var MainShape = new Torus ("main_shape", this);
+			var MainShape = new Spaceship ("main_shape", this);
 			MainShape.TextureId = textureId;
-			MainShape.Scale = new Vector3 (0.2f);
+			MainShape.Scale = new Vector3 (0.15f);
 			MainShape.Position = new Vector3 (0f, 0f, 0f);
+			MainShape.Rotate (Vector3.UnitX, -MathHelper.PiOver2);
+			MainShape.Rotate (Vector3.UnitZ, -MathHelper.Pi);
 			MainShape.IsVisible = true;
 			MainShape.ShapeActions = new Queue<ShapeAction>();
 
@@ -323,7 +320,7 @@ namespace nrcgl
 //			
 //			CurrShape.Scale = new Vector3 (scale);
 
-			Shapes3D ["main_shape"].Rotate (Vector3.UnitZ, 0.01f);
+			//Shapes3D ["main_shape"].Rotate (Vector3.UnitZ, 0.01f);
 
 			Shapes3D ["panel1"].Position = 
 				new Vector3 (
@@ -359,10 +356,10 @@ namespace nrcgl
 				bullet.TextureId = textureId;
 				bullet.Scale = new Vector3 (0.05f);
 				bullet.Position = new Vector3 (
-					Shapes3D ["main_shape"].Position.X,
+					Shapes3D ["main_shape"].Position.X - 0.3f,
 					Shapes3D ["main_shape"].Position.Y,
 					Shapes3D ["main_shape"].Position.Z);
-				bullet.LifeTime.Max = 500;
+				bullet.LifeTime.Max = 50;
 				bullet.ShapeActions = new Queue<ShapeAction> ();
 				bullet.ShapeActions.Enqueue (new ShapeAction (
 					new Action<Shape3D, LifeTime, Object> (
@@ -373,23 +370,50 @@ namespace nrcgl
 									shape.Position.Y,
 									shape.Position.Z +
 									Tween.Solve (
-										Tween.Function.Cubic,
+										Tween.Function.Linear,
 										Tween.Ease.Out,
 										0f,
-										0.7f,
+										1f,
 										lifeTime.Max,
 										lifeTime.Counter));
 						}),
-					new LifeTime (500)));
+					new LifeTime (50)));
+				var bullet1 = new Sphere (
+					"bullet" + Guid.NewGuid ().ToString (), 
+					this);
+				bullet1.TextureId = textureId;
+				bullet1.Scale = new Vector3 (0.05f);
+				bullet1.Position = new Vector3 (
+					Shapes3D ["main_shape"].Position.X + 0.3f,
+					Shapes3D ["main_shape"].Position.Y,
+					Shapes3D ["main_shape"].Position.Z);
+				bullet1.LifeTime.Max = 50;
+				bullet1.ShapeActions = new Queue<ShapeAction> ();
+				bullet1.ShapeActions.Enqueue (new ShapeAction (
+					new Action<Shape3D, LifeTime, Object> (
+						(shape, lifeTime, Object) => {
+
+							shape.Position = 
+								new Vector3 (shape.Position.X,
+									shape.Position.Y,
+									shape.Position.Z +
+									Tween.Solve (
+										Tween.Function.Linear,
+										Tween.Ease.Out,
+										0f,
+										1f,
+										lifeTime.Max,
+										lifeTime.Counter));
+						}),
+					new LifeTime (50)));
 				Shapes3D.Add (bullet.Name, bullet);
+				Shapes3D.Add (bullet1.Name, bullet1);
 				shootCoolDown = 5;
 			}
 			shootCoolDown--;
 			#endregion
 
-			if (moveMainTo != 
-				new Vector2 (Shapes3D ["main_shape"].Position.X, 
-					         Shapes3D ["main_shape"].Position.Z)
+			if (moveMainTo != oldMoveMainTo
 				&& moveCoolDown == 0) {
 
 				var to = new Vector2 (moveMainTo.X, moveMainTo.Y);
@@ -401,9 +425,11 @@ namespace nrcgl
 						new Move2XY(from, to, Width, Height)));
 
 				moveCoolDown = 6;
+				oldMoveMainTo = moveMainTo;
+
 			}
 
-			if (updateCounter % 20 ==0) {
+			if (updateCounter % 20 == 0) {
 
 				Shape3D rock = new Rock ("rock" + Guid.NewGuid ().ToString (),
 				   	                     this);
@@ -428,6 +454,33 @@ namespace nrcgl
 						}),
 					new LifeTime(500)));
 				Shapes3D.Add (rock.Name, rock);
+			}
+
+			if (updateCounter > 500 && updateCounter % 80 == 0) {
+
+				Shape3D ship = new Spaceship ("rock" + Guid.NewGuid ().ToString (),
+					this);
+				var randX = new Random ();
+				float randomX = 3.8f * (float)randX.NextDouble () - 1.9f;
+				ship.Position = new Vector3 ((float) randomX, 0, 3f);
+				ship.Scale = new Vector3 (0.2f);
+				ship.TextureId = textureId;
+				ship.LifeTime.Max = 500;
+				ship.ShapeActions = new Queue<ShapeAction>();
+				ship.ShapeActions.Enqueue(new ShapeAction(
+					new Action<Shape3D, LifeTime, Object>(
+						(shape, lifeTime, Object) => {
+							shape.Rotate(Vector3.UnitX, 0.04f);
+							shape.Rotate(Vector3.UnitY, 0.03f);
+
+							shape.Position = 
+								new Vector3(shape.Position.X,
+									shape.Position.Y,
+									shape.Position.Z -0.03f);
+
+						}),
+					new LifeTime(500)));
+				Shapes3D.Add (ship.Name, ship);
 			}
 
 
