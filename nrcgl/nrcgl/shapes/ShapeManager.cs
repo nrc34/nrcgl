@@ -29,9 +29,9 @@ namespace nrcgl.nrcgl.shapes
 
 
             if (shape3D.ShapeActions.Peek().LifeTime.IsFinish())
-                shape3D.ShapeActions.Dequeue().Execute(shape3D);
+				shape3D.ShapeActions.Dequeue().Execute(shape3D);
             else
-                shape3D.ShapeActions.Peek().Execute(shape3D);
+				shape3D.ShapeActions.Peek().Execute(shape3D);
 
         }
     }

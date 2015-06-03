@@ -85,6 +85,15 @@ namespace nrcgl.nrcgl.shapes
 			set;
 		}
 
+		public bool HasChilds {
+			get;
+			set;
+		}
+
+		public List<Shape3D> Childs {
+			get;
+			set;
+		}
 
 
 		public Shape3D (string name,GLView gLView)
@@ -100,6 +109,9 @@ namespace nrcgl.nrcgl.shapes
 			LifeTime = new LifeTime(0);
 			IsVisible = true;
 			HitCount = 0;
+
+			Childs = new List<Shape3D> ();
+			HasChilds = false;
 		}
 
 

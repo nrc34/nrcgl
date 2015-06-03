@@ -66,13 +66,17 @@ namespace nrcgl.nrcgl.shapes
 			Param2Action = param2Action;
 		}
 
+		public void ExecuteTask(Shape3D shape3D)
+		{
+			Task.Run(()=>Execute(shape3D));
+		}
 
         /// <summary>
         /// Executes the Action delegate method and increases 
         /// the LifeTime counter.
         /// </summary>
         /// <param name="shape3D"></param>
-        public void Execute(Shape3D shape3D)
+		public void Execute(Shape3D shape3D)
         {
 			Action(shape3D, LifeTime, Param2Action);
 
