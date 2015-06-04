@@ -78,6 +78,7 @@
     <Compile Include="nrcgl\shapes\Rock.cs" />
     <Compile Include="Resources\GLView.cs" />
     <Compile Include="nrcgl\shapes\Spaceship.cs" />
+    <Compile Include="nrcgl\shapes\SpaceshipWindScreen.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -116,5 +117,6 @@
     <AndroidAsset Include="Assets\Panel3D.xml" />
     <AndroidAsset Include="Assets\Spaceship.xml" />
     <AndroidAsset Include="Assets\Spaceship_smooth.xml" />
+    <AndroidAsset Include="Assets\SpaceshipWindScreen_smooth.xml" />
   </ItemGroup>
 </Project>

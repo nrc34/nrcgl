@@ -149,7 +149,6 @@ namespace nrcgl
 			MainShape.Position = new Vector3 (0f, 0f, 0f);
 			MainShape.Rotate (Vector3.UnitX, -MathHelper.PiOver2);
 			MainShape.Rotate (Vector3.UnitZ, -MathHelper.Pi);
-			MainShape.IsVisible = true;
 			MainShape.ShapeActions = new Queue<ShapeAction>();
 
 			moveMainTo = 

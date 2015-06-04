@@ -10,6 +10,11 @@ namespace nrcgl.nrcgl.shapes
 {
 	public class Shape3D : IWGameable
 	{
+		private Vector3 position;
+		private Vector3 scale;
+		private Quaternion quaternion;
+
+
 		public GLView GLView {
 			get;
 			set;
@@ -21,18 +26,36 @@ namespace nrcgl.nrcgl.shapes
 		}
 
 		public Vector3 Position {
-			get;
-			set;
+			get{ return position; }
+			set{ 
+				position = value;
+
+				if (HasChilds)
+					foreach (var shape in Childs) 
+						shape.Position = value;
+			}
 		}
 
 		public Vector3 Scale {
-			get;
-			set;
+			get{ return scale; }
+			set{ 
+				scale = value;
+
+				if (HasChilds)
+					foreach (var shape in Childs) 
+						shape.Scale = value;
+			}
 		}
 
 		public Quaternion Quaternion {
-			get;
-			set;
+			get{ return quaternion; }
+			set{ 
+				quaternion = value;
+
+				if (HasChilds)
+					foreach (var shape in Childs) 
+						shape.Quaternion = value;
+			}
 		}
 
 		public bool IsVisible {
@@ -119,6 +142,10 @@ namespace nrcgl.nrcgl.shapes
 		{
 			Quaternion q = Quaternion.FromAxisAngle(axis, angle);
 			Quaternion = q * Quaternion;
+
+			if (HasChilds)
+				foreach (var shape in Childs) 
+					shape.Rotate (axis, angle);
 		}
 
 
@@ -189,6 +216,10 @@ namespace nrcgl.nrcgl.shapes
 			GL.UniformMatrix4 (Shader.MVPMatrixHandle, false, ref ModelViewProjectionMatrix);
 
 			GL.UseProgram (0);
+
+			if (HasChilds)
+				foreach (var shape in Childs) 
+					shape.Update(camera, ProjectionMatrix);
 		}
 
 		public virtual void Render ()
@@ -204,6 +235,10 @@ namespace nrcgl.nrcgl.shapes
 			VertexBuffer.DrawMode = BeginMode;
 
 			VertexBuffer.Bind(Shader);
+
+			if (HasChilds)
+				foreach (var shape in Childs) 
+					shape.Render();
 		}
 
 		#endregion
