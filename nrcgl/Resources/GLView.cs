@@ -58,6 +58,8 @@ namespace nrcgl
 		Vector2 moveMainTo;
 		Vector2 oldMoveMainTo;
 
+		int levelScore = 0;
+
 
 		public GLView (Context context, IAttributeSet attrs) :
 		base (context, attrs)
@@ -312,6 +314,8 @@ namespace nrcgl
 			mainActivity.textView.Text += " s3:" + mainActivity.mSeekBar3.Progress.ToString();
 			mainActivity.textView.Text += " s4:" + mainActivity.mSeekBar4.Progress.ToString();
 
+			mainActivity.textViewScore.Text = levelScore.ToString ();
+
 			GL.UseProgram (0);
 
 //			CurrShape.Quaternion = (Quaternion.FromAxisAngle (Vector3.UnitY, rotateY * 3) *
@@ -487,6 +491,7 @@ namespace nrcgl
 			while (Shapes2Remove.Count > 0)
 				Shapes3D.Remove(Shapes2Remove.Pop().Name);
 
+			//collision detection
 			foreach (var shape in Shapes3D) {
 
 				if (shape.Key.Contains ("rock")) {
@@ -500,6 +505,7 @@ namespace nrcgl
 						bool hitZ = Math.Abs (Shapes3D [item].Position.Z - shape.Value.Position.Z) < 0.2f;
 
 						if (hitX && hitZ && shape.Value.HitCount == 0) {
+							levelScore++;
 							shape.Value.HitCount++;
 							shape.Value.LifeTime.Max = shape.Value.LifeTime.Counter + 10;
 							shape.Value.ShapeActions = new Queue<ShapeAction> ();

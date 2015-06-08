@@ -1,12 +1,11 @@
 ﻿<Properties StartupItem="nrcgl\nrcgl.csproj" GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.02939e3c" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="nrcgl\Resources\GLView.cs">
+  <MonoDevelop.Ide.Workbench>
     <Files>
-      <File FileName="nrcgl\MainActivity.cs" Line="1" Column="1" />
+      <File FileName="nrcgl\MainActivity.cs" Line="75" Column="42" />
       <File FileName="nrcgl\nrcgl\Tools.cs" Line="1" Column="1" />
-      <File FileName="nrcgl\nrcgl\shapes\Shape3D.cs" Line="99" Column="45" />
       <File FileName="..\..\Visual Studio 2013\Projects\OpenTK_NRCGL\OpenTK_NRCGL\NRCGL\Shapes\Shape3D.cs" Line="1" Column="1" />
-      <File FileName="nrcgl\nrcgl\shapes\ShapeManager.cs" Line="28" Column="57" />
+      <File FileName="nrcgl\nrcgl\shapes\ShapeManager.cs" Line="1" Column="1" />
       <File FileName="nrcgl\Assets\fShader_Torus.txt" Line="1" Column="1" />
       <File FileName="nrcgl\nrcgl\shapes\Sphere.cs" Line="1" Column="1" />
       <File FileName="..\..\Visual Studio 2013\Projects\OpenTK_NRCGL\OpenTK_NRCGL\NRCGL\Shapes\Sphere3D.cs" Line="1" Column="1" />
@@ -19,11 +18,11 @@
       <File FileName="nrcgl\nrcgl\shapes\Action.cs" Line="1" Column="1" />
       <File FileName="nrcgl\Game\SpaceShooter.cs" Line="1" Column="1" />
       <File FileName="nrcgl\nrcgl\Move2XY.cs" Line="1" Column="1" />
-      <File FileName="nrcgl\Game\GameActions.cs" Line="19" Column="1" />
+      <File FileName="nrcgl\Game\GameActions.cs" Line="1" Column="1" />
       <File FileName="nrcgl\nrcgl\shapes\Rock.cs" Line="1" Column="1" />
-      <File FileName="nrcgl\Resources\GLView.cs" Line="404" Column="12" />
-      <File FileName="nrcgl\nrcgl\shapes\Panel.cs" Line="28" Column="4" />
-      <File FileName="nrcgl\nrcgl\shapes\Spaceship.cs" Line="13" Column="44" />
+      <File FileName="nrcgl\Resources\GLView.cs" Line="508" Column="21" />
+      <File FileName="nrcgl\nrcgl\shapes\Panel.cs" Line="1" Column="1" />
+      <File FileName="nrcgl\nrcgl\shapes\Shape3D.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

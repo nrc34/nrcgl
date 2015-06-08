@@ -34,6 +34,8 @@ namespace nrcgl
 
 		public TextView textView;
 
+		public TextView textViewScore;
+
 		public SeekBar mSeekBar1;
 		public SeekBar mSeekBar2;
 		public SeekBar mSeekBar3;
@@ -70,6 +72,7 @@ namespace nrcgl
 			mRadioBLine = FindViewById<RadioButton> (Resource.Id.radioButtonLine);
 			mRadioBPoint = FindViewById<RadioButton> (Resource.Id.radioButtonPoint);
 
+			textViewScore = FindViewById<TextView> (Resource.Id.textViewScore);
 			// Load the view
 			var glView = FindViewById<GLView> (Resource.Id.glview);
 

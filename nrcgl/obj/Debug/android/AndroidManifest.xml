@@ -2,7 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.companyname.nrcgl">
   <uses-sdk android:minSdkVersion="16" />
   <application android:label="nrcgl" android:name="mono.android.app.Application" android:debuggable="true">
-    <activity android:configChanges="keyboardHidden|orientation" android:hardwareAccelerated="false" android:icon="@drawable/icon" android:label="nrcgl" android:name="md507da01d19045d5f91987f55bbee96c1e.MainActivity" />
+    <activity android:configChanges="keyboardHidden|orientation" android:hardwareAccelerated="false" android:icon="@drawable/icon" android:label="nrcgl" android:name="md507da01d19045d5f91987f55bbee96c1e.MainActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
     <provider android:name="mono.MonoRuntimeProvider" android:exported="false" android:initOrder="2147483647" android:authorities="com.companyname.nrcgl.mono.MonoRuntimeProvider.__mono_init__" />
     <receiver android:name="mono.android.Seppuku">
       <intent-filter>
@@ -10,12 +15,6 @@
         <category android:name="mono.android.intent.category.SEPPUKU.com.companyname.nrcgl" />
       </intent-filter>
     </receiver>
-    <activity android:configChanges="keyboardHidden|orientation" android:hardwareAccelerated="false" android:icon="@drawable/icon" android:label="nrcgl" android:name="com.companyname.nrcgl.TrialSplashScreen" android:theme="@style/Mono.Android.Theme.Splash" android:noHistory="true">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-        <category android:name="android.intent.category.LAUNCHER" />
-      </intent-filter>
-    </activity>
   </application>
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
